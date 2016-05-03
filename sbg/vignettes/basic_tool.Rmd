@@ -7,6 +7,13 @@ output: html_report
 
 ## Background
 
+The [SevenBridges Cancer Genomics Cloud](https://cgc.sbgenomics.com) is built around the concept of reproducible workflows based
+on the [Common Workflow Language standard](http://www.commonwl.org/). SevenBridges has
+an Application Programming Interface [API](https://en.wikipedia.org/wiki/Application_programming_interface)
+that allows programmatic access and control of the platform. The combination of
+an industrial workflow engine running on cloud infrastructure, available tools
+and workflows, and a programming language like [R](https://www.r-project.org).
+
 ## Load library and initialize
 
 ```{r}
