@@ -1,0 +1,44 @@
+---
+author: "Sean Davis"
+title:  "Wrap a basic tool for with R"
+date:   "May 2, 2016"
+output: html_report
+---
+
+## Background
+
+## Load library and initialize
+
+```{r}
+library(sevenbridges)
+```
+
+```{r}
+in.lst = list(input(id='url',
+                    description='URL of the download',
+                    type='string',
+                    position=1),
+              input(id='ofname',
+                    description='output filename',
+                    type='string',
+                    position=2))
+
+out.lst = list(output(id='file',
+                      glob('*')))
+```
+
+```{r}
+fl = "get_http_file.R"
+library(readr)
+fd = fileDef(name='get_http_file.R',
+             content=read_file(fl))
+
+rbx <- Tool(id = "get_http_file", 
+            label = "get_http_file",
+            hints = requirements(docker(pull = "rocker/r-base"), 
+                                 cpu(1), mem(2000)),
+            requirements = requirements(fd),
+            baseCommand = "Rscript get_http_file.R",
+            inputs = in.lst,
+            outputs = out.lst)
+```
