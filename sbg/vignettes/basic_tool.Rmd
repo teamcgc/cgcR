@@ -35,7 +35,7 @@ fd = fileDef(name='get_http_file.R',
 
 rbx <- Tool(id = "get_http_file", 
             label = "get_http_file",
-            hints = requirements(docker(pull = "rocker/r-base"), 
+            hints = requirements(docker(pull = "rocker/hadleyverse"), 
                                  cpu(1), mem(2000)),
             requirements = requirements(fd),
             baseCommand = "Rscript get_http_file.R",
@@ -54,5 +54,7 @@ p$task_add(name='transfer test',
            inputs=list(
               url='http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.trf.bed.gz',
               ofname='hg38.trf.bed.gz'))
+(tsk = p$task(status='draft'))
 tsk$run()
+
 ```
