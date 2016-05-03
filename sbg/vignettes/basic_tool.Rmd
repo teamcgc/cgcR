@@ -24,7 +24,7 @@ in.lst = list(input(id='url',
                     position=2))
 
 out.lst = list(output(id='file',
-                      glob('output/*')))
+                      glob=('output/*')))
 ```
 
 ```{r}
