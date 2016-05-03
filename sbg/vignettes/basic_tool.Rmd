@@ -42,3 +42,17 @@ rbx <- Tool(id = "get_http_file",
             inputs = in.lst,
             outputs = out.lst)
 ```
+
+```{r}
+a <- Auth(platform = "cgc", username = "sdavis2")
+p = a$project('temp-batch')
+app.txfr = p$app_add("txfr", rbx)
+aid <- app.txfr$id
+p$task_add(name='transfer test',
+           description='transfer test desc',
+           app=aid,
+           inputs=list(
+              url='http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.trf.bed.gz',
+              ofname='hg38.trf.bed.gz'))
+tsk$run()
+```
