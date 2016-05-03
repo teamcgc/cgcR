@@ -9,6 +9,8 @@ library(httr)
 opts <- docopt(doc)
 print(opts)
 
+dir.create('output')
+
 ofname = NULL
 
 if(is.null(opts$FILE)) {
@@ -16,5 +18,7 @@ if(is.null(opts$FILE)) {
 } else {
     ofname=opts$FILE
 }
+
+ofname=file.path('output',ofname)
 
 GET(opts$URL,write_disk(ofname))
