@@ -1,9 +1,13 @@
 ---
 author: "Sean Davis"
-title:  "Wrap a basic tool for with R"
+title:  "Wrap a basic tool and run on SBG platform with R"
 date:   "May 2, 2016"
-output: html_report
+output: html_document
 ---
+
+```{r results='hide',echo=FALSE}
+require(knitr)
+```
 
 ## Introduction
 
@@ -22,9 +26,24 @@ that allows programmatic access and control of the platform. The combination of
 an industrial workflow engine running on cloud infrastructure, available tools
 and workflows, and a programming language like [R](https://www.r-project.org).
 
-## Load library and initialize
+## Preliminaries
 
-```{r}
+Before loading the `sevenbridges` library, it is useful (but not required) to set up a small
+credentials file called `.sbg.auth.yam` in your HOME directory.  The file should look like:
+
+
+```
+cgc:
+  url: https://cgc-api.sbgenomics.com/v2/
+  user:
+    sdavis2:
+      token: YOUR_AUTH_TOKEN_FROM_SBG
+```
+
+On loading the library, this file will be read, allowing you to write code without
+including your AUTH_TOKEN in the actual code.
+
+```{r library}
 library(sevenbridges)
 ```
 
@@ -35,7 +54,7 @@ details of the YAML file that describes a tool. The approach that is used in the
 is to allow the developer to describe the tool using `R` code. In the next code block, I am 
 describing the inputs and outputs of our very simple tool, a command-line R script.
 
-```{r}
+```{r inputs}
 in.lst = list(input(id='url',
                     description='URL of the download',
                     type='string',
@@ -61,7 +80,7 @@ I use the input list and output list from above in the `Tool` specification.  Th
 allows me to directly include the script from the disk; the location of the file is relative
 to the working directory.
 
-```{r}
+```{r createtool}
 fl = system.file("scripts/get_http_file.R", package='cgcR')
 library(readr)
 fd = fileDef(name='get_http_file.R',
@@ -84,18 +103,41 @@ For the authentication, you will need to get a "developer token" and specify tha
 already created a project called "temp-batch".  If you already have a project, specify that project _name_ instead of mine.
 If you do not already have a project, you will need to create one via the API or the web interface first.  
 
-```{r}
+```{r apiwork}
 a <- Auth(platform = "cgc", username = "sdavis2")
 p = a$project('temp-batch')
 app.txfr = p$app_add("txfr", rbx)
 aid <- app.txfr$id
-p$task_add(name='transfer test',
+```
+
+Now, we can use the app that we just created to create a task; in other words, we will
+run the app.  We need to specify the URL and FILE name.
+
+```{r createtask}
+tsk = p$task_add(name='transfer test',
            description='transfer test desc',
            app=aid,
            inputs=list(
               url='http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.trf.bed.gz',
               ofname='hg38.trf.bed.gz'))
-(tsk = p$task(status='draft'))
-tsk$run()
-
 ```
+
+After submitting the task, we can list all tasks that remain in the `draft` state.  These tasks
+are ready to run, but awaiting an official `run` command from us.
+
+```{r checkstatus}
+p$task(status='draft')
+```
+
+Finally, we run the task.
+
+```{r runtask}
+tsk$run()
+```
+
+## sessionInfo()
+
+```{r sessionInfo}
+sessionInfo()
+```
+
