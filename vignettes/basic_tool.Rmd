@@ -5,6 +5,14 @@ date:   "May 2, 2016"
 output: html_report
 ---
 
+## Introduction
+
+In this little tutorial, I am going to use the `sevenbridges` R package to develop a small
+tool that does a download of a URL to a file on the local disk.  I will be wrapping that tool
+in a [common workflow language](http://www.commonwl.org/) wrapper and then uploading the resulting
+tool into the [SevenBridges](https://cgc.sevenbridges.com/) system.  Finally, I will execute
+that tool on the cloud via an API call.
+
 ## Background
 
 The [SevenBridges Cancer Genomics Cloud](https://cgc.sbgenomics.com) is built around the concept of reproducible workflows based
@@ -20,6 +28,13 @@ and workflows, and a programming language like [R](https://www.r-project.org).
 library(sevenbridges)
 ```
 
+## Preparing the inputs and outputs
+
+The [common workflow language](http://www.commonwl.org/draft-3/UserGuide.html) describes in some detail the 
+details of the YAML file that describes a tool. The approach that is used in the `sevenbridges` package
+is to allow the developer to describe the tool using `R` code. In the next code block, I am 
+describing the inputs and outputs of our very simple tool, a command-line R script.
+
 ```{r}
 in.lst = list(input(id='url',
                     description='URL of the download',
@@ -33,6 +48,18 @@ in.lst = list(input(id='url',
 out.lst = list(output(id='file',
                       glob=('output/*')))
 ```
+
+## Create the tool wrapper
+
+The tool that I am going to be wrapping is a simple script that uses the httr library
+to download a file from a URL to a local file. In order to ensure that the correct R
+environment is available where this is run, I will specify that the docker image
+`rocker/hadleyverse` is a requirement.  Note that this docker image already has the
+necessary pieces needed to run the script--in particular, it has `httr` installed.
+
+I use the input list and output list from above in the `Tool` specification.  The `fileDef`
+allows me to directly include the script from the disk; the location of the file is relative
+to the working directory.
 
 ```{r}
 fl = "get_http_file.R"
@@ -49,6 +76,13 @@ rbx <- Tool(id = "get_http_file",
             inputs = in.lst,
             outputs = out.lst)
 ```
+
+## Upload the script to SBG and run an example
+
+The next few lines are the first to actually interact with the [SevenBridges API](http://docs.sevenbridges.com/docs/the-api).
+For the authentication, you will need to get a "developer token" and specify that in your call to `Auth()` below. I had
+already created a project called "temp-batch".  If you already have a project, specify that project _name_ instead of mine.
+If you do not already have a project, you will need to create one via the API or the web interface first.  
 
 ```{r}
 a <- Auth(platform = "cgc", username = "sdavis2")
