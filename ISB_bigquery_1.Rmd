@@ -1,0 +1,36 @@
+---
+title: "Querying TCGA data using BigQuery"
+author: "Sean Davis"
+date: "May 5, 2016"
+output: html_document
+---
+
+```{r init}
+library(bigquery)
+```
+
+
+```{r listtables}
+bigrquery::list_tables("isb-cgc", "tcga_201510_alpha")
+```
+
+The first time you run this, you will be asked to login to a google billing account. This process will
+involve R kicking you over to a web browser (the first time) where you will need to login to your
+google cloud project. You will likely see this type of message....
+
+```
+Use a local file to cache OAuth access credentials between R sessions?
+1: Yes
+2: No
+
+Selection: Yes
+Adding ^\.httr-oauth$ to .Rbuildignore
+Waiting for authentication in browser...
+Press Esc/Ctrl + C to abort
+Authentication complete.
+```
+
+Assuming that you have set up an account with the ISB Cancer Genomics 
+Cloud Pilot, you can authorize R to access the account, and from then on will be able to operate without
+web access.  
+
