@@ -49,6 +49,18 @@ out.lst = list(output(id='file',
                       glob=('output/*')))
 ```
 
+## Create the tool wrapper
+
+The tool that I am going to be wrapping is a simple script that uses the httr library
+to download a file from a URL to a local file. In order to ensure that the correct R
+environment is available where this is run, I will specify that the docker image
+`rocker/hadleyverse` is a requirement.  Note that this docker image already has the
+necessary pieces needed to run the script--in particular, it has `httr` installed.
+
+I use the input list and output list from above in the `Tool` specification.  The `fileDef`
+allows me to directly include the script from the disk; the location of the file is relative
+to the working directory.
+
 ```{r}
 fl = "get_http_file.R"
 library(readr)
@@ -64,6 +76,13 @@ rbx <- Tool(id = "get_http_file",
             inputs = in.lst,
             outputs = out.lst)
 ```
+
+## Upload the script to SBG and run an example
+
+The next few lines are the first to actually interact with the [SevenBridges API](http://docs.sevenbridges.com/docs/the-api).
+For the authentication, you will need to get a "developer token" and specify that in your call to `Auth()` below. I had
+already created a project called "temp-batch".  If you already have a project, specify that project _name_ instead of mine.
+If you do not already have a project, you will need to create one via the API or the web interface first.  
 
 ```{r}
 a <- Auth(platform = "cgc", username = "sdavis2")
