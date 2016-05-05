@@ -62,7 +62,7 @@ allows me to directly include the script from the disk; the location of the file
 to the working directory.
 
 ```{r}
-fl = "get_http_file.R"
+fl = system.file("scripts/get_http_file.R", package='cgcR')
 library(readr)
 fd = fileDef(name='get_http_file.R',
              content=read_file(fl))
