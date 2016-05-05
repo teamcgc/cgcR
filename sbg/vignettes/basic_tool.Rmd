@@ -5,6 +5,14 @@ date:   "May 2, 2016"
 output: html_report
 ---
 
+## Introduction
+
+In this little tutorial, I am going to use the `sevenbridges` R package to develop a small
+tool that does a download of a URL to a file on the local disk.  I will be wrapping that tool
+in a [common workflow language](http://www.commonwl.org/) wrapper and then uploading the resulting
+tool into the [SevenBridges](https://cgc.sevenbridges.com/) system.  Finally, I will execute
+that tool on the cloud via an API call.
+
 ## Background
 
 The [SevenBridges Cancer Genomics Cloud](https://cgc.sbgenomics.com) is built around the concept of reproducible workflows based
@@ -19,6 +27,13 @@ and workflows, and a programming language like [R](https://www.r-project.org).
 ```{r}
 library(sevenbridges)
 ```
+
+## Preparing the inputs and outputs
+
+The [common workflow language](http://www.commonwl.org/draft-3/UserGuide.html) describes in some detail the 
+details of the YAML file that describes a tool. The approach that is used in the `sevenbridges` package
+is to allow the developer to describe the tool using `R` code. In the next code block, I am 
+describing the inputs and outputs of our very simple tool, a command-line R script.
 
 ```{r}
 in.lst = list(input(id='url',
