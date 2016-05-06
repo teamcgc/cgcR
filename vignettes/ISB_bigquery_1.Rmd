@@ -89,15 +89,17 @@ head(tbl_annot)
 tbl_mut = tbl(bq,'Somatic_Mutation_calls')
 ```
 
-## Examining SNVs by disease type
+## How many variants of each type are present for each disease type?
 
-```{r}
+```{r mutcountsbystudy}
 mut_counts = tbl_mut %>% 
   select(Study, Variant_Classification) %>% 
   group_by(Study,Variant_Classification) %>% 
   summarize(n = n()) %>% 
   arrange(Study,Variant_Classification)
 ```
+
+```{r 
 
 
 ```{r sessionInfo}
