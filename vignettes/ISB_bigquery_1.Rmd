@@ -83,8 +83,21 @@ coding.
 head(tbl_annot)
 ```
 
+# Example use cases
 
+```{r setuptables}
+tbl_mut = tbl(bq,'Somatic_Mutation_calls')
+```
 
+## Examining SNVs by disease type
+
+```{r}
+mut_counts = tbl_mut %>% 
+  select(Study, Variant_Classification) %>% 
+  group_by(Study,Variant_Classification) %>% 
+  summarize(n = n()) %>% 
+  arrange(Study,Variant_Classification)
+```
 
 
 ```{r sessionInfo}
