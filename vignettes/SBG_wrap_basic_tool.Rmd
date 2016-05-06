@@ -2,7 +2,12 @@
 author: "Sean Davis"
 title:  "Wrap a basic tool and run on SBG platform with R"
 date:   "May 2, 2016"
-output: html_document
+output: 
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{SBG Wrapping and Running a Tool}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r results='hide',echo=FALSE}
