@@ -2,7 +2,12 @@
 title: "SBCGC-R-CreateWorkflow"
 author: "Durga Addepalli"
 date: "May 2, 2016"
-output: html_document
+output: 
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{SBG Creating a Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
