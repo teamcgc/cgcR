@@ -1,6 +1,6 @@
 Package: cgcR
 Title: NCI Cancer Genomics Cloud examples in R
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(person("Sean", "Davis", email = "seandavi@gmail.com", role = c("aut", "cre")), 
   person("Durga", "Addepalli", email = "kanakadurga.addepalli@nih.gov", role = c("aut")), 
   person("Hsinyi", "Tsang", email = "hsinyi.tsang@nih.gov", role = c("aut")))
@@ -11,3 +11,5 @@ Depends: R (>= 3.3.0)
 License: MIT
 LazyData: true
 Depends: sevenbridges, bigrquery, dplyr
+VignetteBuilder: knitr
+Suggests: BiocStyle, knitr, rmarkdown

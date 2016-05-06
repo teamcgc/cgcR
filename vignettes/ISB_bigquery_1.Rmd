@@ -2,8 +2,15 @@
 title: "Querying TCGA data using BigQuery"
 author: "Sean Davis"
 date: "May 5, 2016"
-output: html_document
+output: 
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{ISB BigQuery Part 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
+# Setup
 
 ```{r init}
 library(bigrquery)
@@ -38,7 +45,7 @@ browser interaction.
 bigrquery::list_tables("isb-cgc", "tcga_201510_alpha")
 ```
 
-## The dplyr package for bigquery
+# The dplyr package for bigquery
 
 The [dplyr database tutorial](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html) discusses how to use `dplyr` with Google BigQuery. We are going to use that approach here to simplify 
 the interaction with the database. 
@@ -75,6 +82,7 @@ coding.
 ```{r bq_annot_head}
 head(tbl_annot)
 ```
+
 
 
 
