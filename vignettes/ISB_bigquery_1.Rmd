@@ -10,6 +10,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Background
+
+## What is this BigQuery?
+
+BigQuery is Google's managed SQL-like database system that is designed to run at PB scales.
+It allows storing, querying, and manipulating absolutely *huge* datasets with little more 
+effort (perhaps even less) than operating on a standard relational database. Cost is a 
+pay-as-you-go model, based on the amount of data processed. 
+
+## What is in BigQuery
+
+The [Institute for Systems Biology (ISB) Cancer Genomics Cloud](http://cgc.systemsbiology.net/) have
+loaded all of the TCGA level 3 data into BigQuery, enabling very facile slicing of data to 
+a very fine granularity. Bulk data in file form is still likely to be the most appropriate
+way to do large-scale data mining and inference, but for gene- or sample-based queries or 
+to join datasets in novel ways, BigQuery offers a possible solution.
+
 # Setup
 
 ```{r init}
