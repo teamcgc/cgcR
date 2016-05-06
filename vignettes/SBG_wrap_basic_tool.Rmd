@@ -14,7 +14,7 @@ vignette: >
 require(knitr)
 ```
 
-## Introduction
+# Introduction
 
 In this little tutorial, I am going to use the `sevenbridges` R package to develop a small
 tool that does a download of a URL to a file on the local disk.  I will be wrapping that tool
@@ -22,7 +22,7 @@ in a [common workflow language](http://www.commonwl.org/) wrapper and then uploa
 tool into the [SevenBridges](https://cgc.sevenbridges.com/) system.  Finally, I will execute
 that tool on the cloud via an API call.
 
-## Background
+# Background
 
 The [SevenBridges Cancer Genomics Cloud](https://cgc.sbgenomics.com) is built around the concept of reproducible workflows based
 on the [Common Workflow Language standard](http://www.commonwl.org/). SevenBridges has
@@ -31,7 +31,7 @@ that allows programmatic access and control of the platform. The combination of
 an industrial workflow engine running on cloud infrastructure, available tools
 and workflows, and a programming language like [R](https://www.r-project.org).
 
-## Preliminaries
+# Preliminaries
 
 Before loading the `sevenbridges` library, it is useful (but not required) to set up a small
 credentials file called `.sbg.auth.yam` in your HOME directory.  The file should look like:
@@ -52,7 +52,7 @@ including your AUTH_TOKEN in the actual code.
 library(sevenbridges)
 ```
 
-## Preparing the inputs and outputs
+# Preparing the inputs and outputs
 
 The [common workflow language](http://www.commonwl.org/draft-3/UserGuide.html) describes in some detail the 
 details of the YAML file that describes a tool. The approach that is used in the `sevenbridges` package
@@ -73,7 +73,7 @@ out.lst = list(output(id='file',
                       glob=('output/*')))
 ```
 
-## Create the tool wrapper
+# Create the tool wrapper
 
 The tool that I am going to be wrapping is a simple script that uses the httr library
 to download a file from a URL to a local file. In order to ensure that the correct R
@@ -101,7 +101,7 @@ rbx <- Tool(id = "get_http_file",
             outputs = out.lst)
 ```
 
-## Upload the script to SBG and run an example
+# Upload the script to SBG and run an example
 
 The next few lines are the first to actually interact with the [SevenBridges API](http://docs.sevenbridges.com/docs/the-api).
 For the authentication, you will need to get a "developer token" and specify that in your call to `Auth()` below. I had
@@ -140,7 +140,7 @@ Finally, we run the task.
 tsk$run()
 ```
 
-## sessionInfo()
+# sessionInfo()
 
 ```{r sessionInfo}
 sessionInfo()
