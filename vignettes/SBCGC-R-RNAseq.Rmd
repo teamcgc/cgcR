@@ -1,0 +1,100 @@
+---
+title: "NCI-IRP Cancer Genomics Cloud Workshop - Using R for Seven Bridges CGC"
+author: "Steve Tsang"
+# change date below
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+ 
+---
+
+This is the second workshop for the NCI Cancer Genomic Cloud Pilots. This document includes instructions to do the following tasks using the Seven Bridges API with the R client.  
+
+This is a work-in-progress.
+
+[Material for this workshop](http://teamcgc.nci.nih.gov.s3-website-us-east-1.amazonaws.com/)  
+[Additional information can be found here - (Follow API V2)](https://github.com/sbg/sevenbridges-r)  
+
+Pre-requisite  
+R studio
+<https://www.rstudio.com/products/rstudio/download/>  
+Seven Bridges CGC account
+<https://cgc.sbgenomics.com/login/>  
+Login and retrieve your authorization token  
+
+## Installation
+Make sure you have the latest verion of bioconductor installed. (Updated 5/3/2016)
+
+```{r}
+#source("http://bioconductor.org/biocLite.R")
+#useDevel(devel = TRUE)
+#biocLite("sevenbridges")
+```
+
+For now, use github
+
+
+
+## Authorization
+
+````{r, eval=FALSE}
+library(sevenbridges) 
+a<-Auth(user="tsang", platform = "cgc", token = "XXX")
+
+````
+
+##  Navigate the CGC
+
+````{r}
+p<- a$project(id="tsang/hackathon")
+##a$project()
+##p$file()
+p$file()[[1]]
+p$file()[[1]]$download_url()
+
+````
+
+## Download Files
+````{r, eval=FALSE}
+fid = p$file()[[1]]$id
+a$project("hackathon")[[2]]$file(id = fid)$download("~/Downloads/")
+
+fls <-a$project("hackathon")$file()
+download(fls, "~/Downloads/")
+````
+
+## Upload files
+from my computer
+````{r, eval=FALSE}
+fl = "~/Downloads/count000.csv"
+> p$upload(fl, overwrite=FALSE)
+
+dir <- "~/Downloads/temp/"
+list.files(dir)
+p$upload(dir, overwrite=TRUE)
+
+````
+
+## Start a task with apps
+
+````{r, eval=FALSE}
+p<-a$project(id="tsang/temp-1")
+p$app()
+ap <- p$app()[[1]]
+#RNAseq STAR DEseq2
+
+a$project("temp-1")$app_add(name= "Draft rnaseq",
+                            description = "test",
+                            app = tsang/temp-1/rna-seq-STAR-deseq2,
+                            inputs = list(min=1, max=10))
+````
+
+More to come...  
+
+
+
+
+
+
