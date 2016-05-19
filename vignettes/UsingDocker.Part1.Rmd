@@ -70,7 +70,7 @@ This tutorial assumes that you are familiar with the basics of Seven Bridges CGC
 If not, please check out <http://teamcgc.nci.nih.gov.s3-website-us-east-1.amazonaws.com/>  
 
 
-In this example, we will use the unix command "grep" to look for a string ("KX") in a input FASTA file and pring the line containing that string in an output file  
+In this example, we will use the unix command "grep" to look for a string ("KX") in a input FASTA file and print the line containing that string in an output file  
 
 Input FASTA file content  
 ````{}
