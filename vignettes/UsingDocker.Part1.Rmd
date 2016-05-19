@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Install Docker
-https://docs.docker.com/engine/installation/
+https://docs.docker.com/engine/installation/  
 There are many ways of installing Docker.  Go to the url above for installation details.
 
 I installed Docker using "brew"  
