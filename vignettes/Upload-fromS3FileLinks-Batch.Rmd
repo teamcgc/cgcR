@@ -1,0 +1,44 @@
+---
+title: "get-http-Batch-infile"
+author: "Durga Addepalli"
+date: "May 13, 2016"
+output: html_document
+---
+
+```{r}
+library(sevenbridges)
+a <- Auth(token = "fake_token", url = "https://cgc-api.sbgenomics.com/v2/")
+p = a$project('RWorkshop2')
+```
+
+### Copy the get s3 file app
+
+```{r}
+
+app.gets3fl <- a$copyApp(id =  "tsang/temp/txfr/2", project = pid, name = "copytxfrforbatch")
+apid <- app.gets3fl$id
+```
+
+### Run the app for the number of files listed in input file
+
+```{r}
+fileName <- "S3Links.txt"
+conn <- file(fileName,open="r")
+linn <-readLines(conn)
+for (i in 1:length(linn)){
+  url = (linn[i])
+  ## print(url)
+  fn <- tail(strsplit(url,split="/")[[1]],1)
+  ##print(fn)
+  
+tsk <-p$task_add(name= "s3upload-file-links",
+           description='File upload from S3, with input from a file',
+           app=apid,
+           inputs=list(url = url, ofname = fn))
+
+tsk$run()
+
+}
+close(conn)
+
+```
