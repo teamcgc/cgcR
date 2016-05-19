@@ -17,17 +17,17 @@ References:
 - http://docs.cancergenomicscloud.org/docs/upload-your-docker-image
 - https://docs.docker.com/engine/userguide/containers/dockerimages/
 
-To start, make sure you have an account with Seven Bridges CGC
+To start, make sure you have an account with Seven Bridges CGC.
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Install Docker
-https://docs.docker.com/engine/installation/  
+- https://docs.docker.com/engine/installation/  
 There are many ways of installing Docker.  Go to the url above for installation details.
 
-I installed Docker using "brew"  
+I installed Docker using "Homebrew" on my mac.  
 
 ````{}
 brew install docker
