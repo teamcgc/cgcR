@@ -91,7 +91,7 @@ We will create a tool with the latest Ubuntu image in the CGC registry to search
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/1.png)
+![image](../images/1.png)
 Under "GENERAL"
 - Login to your CGC account  
 - Click on the "Apps" tab  
@@ -105,7 +105,7 @@ This creates a tool that will pull the latest Ubuntu image from the CGC register
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/2.png)
+![image](../images/2.png)
 Under "INPUTS"
 - Create 3 input ports by clicking on the "+" sign.
 You want the resulting command line to look like -    
@@ -116,13 +116,13 @@ input_file is position 2 in the command line
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/3.png)
+![image](../images/3.png)
 Under "OUTPUTS"
 - Create an output port by clicking on "+"  
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/4.png)
+![image](../images/4.png)
 Under "TEST"
 You can enter different names different ports and see if the resulting command line looks right
 - Click on "SAVE"
@@ -130,25 +130,25 @@ You can enter different names different ports and see if the resulting command l
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/6.png)
+![image](../images/6.png)
 Under "Set Input Data"
 - Click on "Pick files" to select the input file  
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/5.png)
+![image](../images/5.png)
 Under "Define App Settings"
 - Enter the name of the output file and the string/pattern you want to search in the input file
 - Click "Run" and confirm
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/7.png)
+![image](../images/7.png)
 Task being queued and waiting to run
 <br />
 <br />
 <br />
-![image](/Users/tsang/Rworking/images/8.png)
+![image](../images/8.png)
 <br />
 You should see the output file under "Files"
 In the output file (output.txt), you should see the header line containing the string "KX"
