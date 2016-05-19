@@ -27,17 +27,28 @@ References:
 - https://docs.docker.com/engine/userguide/containers/dockerimages/
 >>>>>>> 8c0b603d21ae062f309e1b00bbdce2cb986780f3
 
+<<<<<<< HEAD
 To start, make sure you have an account with Seven Bridges CGC.  
+=======
+To start, make sure you have an account with Seven Bridges CGC.
+>>>>>>> 21b9b758c58e3a06c095c3f81ad0a67b0f1d9a02
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Install Docker
+<<<<<<< HEAD
 <https://docs.docker.com/engine/installation/>  
 There are many ways of installing Docker.  Go to the url above for installation details.  
 
 I installed Docker using "Homebrew" on my mac.    
+=======
+- https://docs.docker.com/engine/installation/  
+There are many ways of installing Docker.  Go to the url above for installation details.
+
+I installed Docker using "Homebrew" on my mac.  
+>>>>>>> 21b9b758c58e3a06c095c3f81ad0a67b0f1d9a02
 
 ````{}
 brew install docker
