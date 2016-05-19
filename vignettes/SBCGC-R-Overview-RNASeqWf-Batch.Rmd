@@ -192,6 +192,7 @@ To Copy multiple files
 ```{r}
 fid <- "56d5dd4be4b0f636ff14cb69"
 fid2 <- "56d5dd4be4b0ac987e61af8e"
+pid <- a$project("Workshop Demo")$id
 a$copyFile(c(fid, fid2), project = pid)
 p$file()
 ```
@@ -276,8 +277,6 @@ a$app(project = pid)
 
 Here we demonstrate how to upload files directly from a S3 bucket to your CGC project. We will be using the Get_Http_file app to get files. ......
 
-To run the App we need to create a draft Task.
-
 To create a draft task, you need to call the task_add function from Project object. And you need to pass following arguments
 
 name: name for this task
@@ -340,6 +339,7 @@ WorkFlow Description:
       - Second Strand (fastQ)
       
 
+### Running the RNA-Seq Alignment STAR which takes a FASTQ file as input
 
 ```{r}
 fastq1 <- p$file(name = "G28029_pe_1.fastq")
@@ -389,38 +389,27 @@ tsk1$update()
 tsk1$monitor()
 ```
 
-### Running the RNA-Seq Alignment STAR which takes a BAm file as input
+### Running the RNA-Seq Alignment STAR which takes a BAM file as input
 
 ```{r}
-
-app.rnawfbam <- a$copyApp(id =  "Durga/rworkshop2/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wfl-inbam")
-
+## Copy the app
+app.rnawfbam <- a$copyApp(id = "Durga/test1-tumor-normal/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wfl-inbam")
 rwbid <- app.rnawfbam$id
 ## check it is copied
 a$app(project = pid)
-```
 
-```{r}
+## Run the app
+
 (bam.in <- p$file("G41707Downsample_data_36_downsampled.bam"))
 (gtf.in <- p$file(".gtf"))
-(gtf.in1 = new('FilesList',listData=list(gtf.in)))
 (fasta.in <- p$file("HG19_Broad_variant.fasta"))
 
-
-tsk3 = p$task_add(name = "rwflinbamtest", 
+tsk3 = p$task_add(name = "rwfl-inbamtest2-R", 
            description = "Testing the RNA-seq STAR workflow with input BAM file", 
            app = rwbid,
-           inputs =  list(#input_bam = bam.in, 
+           inputs =  list(input_file = bam.in, 
                           genomeFastaFiles = fasta.in,
-                          sjdbGTFfile = gtf.in1))
-
-
-## p$task_add(name = "rwfltest_tf", 
-##             description = "Testing the RNA-seq STAR workflow", 
- ##           app = rwid,
-##            inputs =  list(fastq = fastq.in, 
-##                          genomeFastaFiles = fasta.in,
-##                         sjdbGTFfile = sevenbridges:::FilesList(gtf.in)))
+                          sjdbGTFfile = sevenbridges:::FilesList(gtf.in)))
 
 ## confirm
 p$task(status = "draft")
@@ -431,6 +420,44 @@ tsk3$run()
 tsk3$update()
 tsk3$monitor()
 ```
+
+## BATCH - Running the RNA-Seq Alignment STAR which takes multiple BAM file as input
+```{r}
+## Copy the app
+## another app for batch
+app.rnawfbamb <- a$copyApp(id = "Durga/rworkshop2/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wf-inbam-batch-UIcopy")
+
+rwbbid <- app.rnawfbamb$id
+## check it is copied
+a$app(project = pid)
+
+
+## Run the app
+
+(bam.in <- p$file("downsampled.bam"))
+(gtf.in <- p$file(".gtf"))
+(fasta.in <- p$file("HG19_Broad_variant.fasta"))
+
+tsk3 = p$task_add(name = "rwf-inbam_batch-R", 
+           description = "Testing the RNA-seq STAR workflow with multiple input BAM files", 
+           app = rwbbid,
+           batch = batch(input = "input_file"),
+           inputs =  list(input_file = bam.in, 
+                          genomeFastaFiles = fasta.in,
+                          sjdbGTFfile = sevenbridges:::FilesList(gtf.in)))
+
+
+
+## confirm
+p$task(status = "draft")
+
+## Run the Task
+tsk3 <- p$task(status = "draft")
+tsk3$run()
+tsk3$update()
+tsk3$monitor()
+```
+
 
 ## More tutorials
 
