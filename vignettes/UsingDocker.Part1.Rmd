@@ -1,9 +1,14 @@
 ---
-title: "Using Docker with Seven Bridges CGC - Part 1"
+title: "Using Docker with Seven Bridges Genomics (SBG) CGC - Part 1"
 author: "Steve Tsang"
 date: "May 18, 2016"
 output: html_document
 ---
+This workflow decribes the installation of Docker and run a tool using a Docker image in the SBG CGC image registry.
+
+1) Install Docker
+2) Pull the Hello-world image from Docker and confirm installation
+3) Create a tool in SBG-CGC using Docker and SBG User Interface
 
 References:
 http://docs.cancergenomicscloud.org/docs/upload-your-docker-image
