@@ -4,12 +4,8 @@ author: "Steve Tsang"
 date: "May 18, 2016"
 output: html_document
 ---
-
-### Introduction
-
 This workflow decribes the installation of Docker and run a tool using a Docker image in the SBG CGC image registry.
 
-<<<<<<< HEAD
 1) Install Docker  
 2) Pull the Hello-world image from Docker and confirm installation  
 3) Create a tool in SBG-CGC using a Docker image and SBG User Interface  
@@ -17,38 +13,18 @@ This workflow decribes the installation of Docker and run a tool using a Docker 
 References:  
 <http://docs.cancergenomicscloud.org/docs/upload-your-docker-image>  
 <https://docs.docker.com/engine/userguide/containers/dockerimages/>
-=======
-1. Install Docker
-2. Pull the Hello-world image from Docker and confirm installation
-3. Create a tool in SBG-CGC using Docker and SBG User Interface
 
-References:
-- http://docs.cancergenomicscloud.org/docs/upload-your-docker-image
-- https://docs.docker.com/engine/userguide/containers/dockerimages/
->>>>>>> 8c0b603d21ae062f309e1b00bbdce2cb986780f3
-
-<<<<<<< HEAD
 To start, make sure you have an account with Seven Bridges CGC.  
-=======
-To start, make sure you have an account with Seven Bridges CGC.
->>>>>>> 21b9b758c58e3a06c095c3f81ad0a67b0f1d9a02
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Install Docker
-<<<<<<< HEAD
 <https://docs.docker.com/engine/installation/>  
 There are many ways of installing Docker.  Go to the url above for installation details.  
 
 I installed Docker using "Homebrew" on my mac.    
-=======
-- https://docs.docker.com/engine/installation/  
-There are many ways of installing Docker.  Go to the url above for installation details.
-
-I installed Docker using "Homebrew" on my mac.  
->>>>>>> 21b9b758c58e3a06c095c3f81ad0a67b0f1d9a02
 
 ````{}
 brew install docker
