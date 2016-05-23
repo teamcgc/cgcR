@@ -52,7 +52,7 @@ docker-machine env dev
 eval "$(docker-machine env dev)"
 ```
 
-To stop the machine/remove called "dev"  
+To stop/remove the host called "dev" - skip this for now  
 ````{eval=FALSE}
 docker-machine stop dev
 docker-machine rm dev
