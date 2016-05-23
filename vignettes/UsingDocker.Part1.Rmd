@@ -41,15 +41,21 @@ brew install docker-machine
 
 ```{}
 docker-machine ls
+
+#if you do not have host named "dev"
+docker-machine create --driver virtualbox dev
+#if you have a host named "dev
 docker-machine start dev
+
 docker-machine regenerate-certs dev
 docker-machine env dev
 eval "$(docker-machine env dev)"
 ```
 
-To stop the machine called "dev"  
+To stop the machine/remove called "dev"  
 ````{eval=FALSE}
 docker-machine stop dev
+docker-machine rm dev
 ````
 
 ### The Hello-world example 
