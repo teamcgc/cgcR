@@ -1,6 +1,6 @@
 Package: cgcR
 Title: NCI Cancer Genomics Cloud examples in R
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(person("Sean", "Davis", email = "seandavi@gmail.com", role = c("aut", "cre")), 
   person("Durga", "Addepalli", email = "kanakadurga.addepalli@nih.gov", role = c("aut")), 
   person("Hsinyi", "Tsang", email = "hsinyi.tsang@nih.gov", role = c("aut")))
@@ -8,8 +8,10 @@ Description: The National Cancer Institute has invested in three Cancer Genomics
   Pilots. This package includes mainly documentation in the way of vignettes for 
   interacting with various aspects of those pilots via R. 
 Depends: R (>= 3.3.0)
+Depends: sevenbridges, bigrquery, dplyr
+Imports: ComplexHeatmap, ggplot2, shiny, grid, TxDb.Hsapiens.UCSC.hg19.knownGene,
+	TxDb.Hsapiens.UCSC.hg18.knownGene
 License: MIT
 LazyData: true
-Depends: sevenbridges, bigrquery, dplyr
 VignetteBuilder: knitr
 Suggests: BiocStyle, knitr, rmarkdown
