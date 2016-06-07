@@ -3,6 +3,10 @@ title: "SBCGC-R-CreateWorkflow"
 author: "Durga Addepalli"
 date: "May 2, 2016"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{SBCGC R Create Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 

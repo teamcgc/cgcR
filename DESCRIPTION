@@ -1,6 +1,6 @@
 Package: cgcR
 Title: NCI Cancer Genomics Cloud examples in R
-Version: 0.1.0
+Version: 0.1.1
 Author: Durga Addepalli, Steve Tsang, David Roberson, Sean Davis
 Maintainer: Sean Davis <seandavi@gmail.com>
 Description: The National Cancer Institute has invested in three Cancer Genomics Cloud
