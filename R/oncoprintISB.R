@@ -160,6 +160,23 @@ geneVecToOPInputByStudy = function(bq, genevec, studytag="LUAD") {
 
 library(shiny)
 
+#' A simple oncoprint App based on Institute for Systems Biology NCI Cloud Pilot
+#'
+#' This function is a proof-of-concept for using the BigQuery interface
+#' to TCGA data provided by the ISB Cancer Genomics Cloud Pilot. To use
+#' this function, you must have a valid billing account with Google. If
+#' you have an account with the ISB Cancer Genomics Cloud, then you can
+#' use that account.
+#'
+#' @param bq A \code{\link{src_bigquery}} object
+#'
+#' @examples
+#' \dontrun{
+#' library(shiny)
+#' library(dplyr)
+#' isbApp(src_bigquery(project='isb-cgc',
+#'    billing='isb-cgc-01-0006',dataset='tcga_201510_alpha')
+#' }
 isbApp = function(bq) {
   gnsets = someSets
   studies = sort((studiesInTable(bq) %>% as.data.frame())[,1])
