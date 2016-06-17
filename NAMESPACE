@@ -1,1 +1,8 @@
-exportPattern("^[^\\.]")
+export(isbApp, rainfallBQ)
+
+import(ComplexHeatmap)
+import(ggplot2)
+import(shiny)
+import(grid)
+import(TxDb.Hsapiens.UCSC.hg19.knownGene)
+import(TxDb.Hsapiens.UCSC.hg18.knownGene)
