@@ -170,6 +170,8 @@ library(shiny)
 #'
 #' @param bq A \code{\link{src_bigquery}} object
 #'
+#' @export
+#' 
 #' @examples
 #' \dontrun{
 #' library(shiny)
