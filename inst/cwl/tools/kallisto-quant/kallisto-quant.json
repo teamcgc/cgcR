@@ -1,0 +1,240 @@
+{
+  "class": "CommandLineTool",
+  "id": "https://cgc-api.sbgenomics.com/v2/apps/sdavis2/target-osteo/kallisto/18/raw/",
+  "successCodes": [],
+  "sbg:cmdPreview": "kallisto quant  --plaintext  --bias -o ./",
+  "arguments": [
+    {
+      "separate": true,
+      "valueFrom": "--plaintext",
+      "prefix": ""
+    },
+    {
+      "separate": true,
+      "valueFrom": "--bias"
+    },
+    {
+      "separate": true,
+      "valueFrom": "./",
+      "position": 1,
+      "prefix": "-o"
+    }
+  ],
+  "sbg:modifiedBy": "sdavis2",
+  "label": "kallisto-quant",
+  "inputs": [
+    {
+      "id": "#fastq_files",
+      "type": [
+        "null",
+        {
+          "items": "File",
+          "type": "array",
+          "name": "fastq_files"
+        }
+      ],
+      "label": "Fastq files",
+      "description": "input fastq files (can be gzipped)",
+      "inputBinding": {
+        "itemSeparator": " ",
+        "separate": true,
+        "position": 98,
+        "sbg:cmdInclude": true
+      },
+      "sbg:stageInput": null
+    },
+    {
+      "description": "Index file as created by \"kallisto index\"",
+      "id": "#kallisto_index",
+      "label": "Kallisto index file",
+      "type": [
+        "null",
+        "File"
+      ],
+      "inputBinding": {
+        "separate": true,
+        "position": 1,
+        "sbg:cmdInclude": true,
+        "prefix": "-i"
+      }
+    }
+  ],
+  "sbg:contributors": [
+    "sdavis2"
+  ],
+  "description": "",
+  "sbg:revision": 18,
+  "sbg:latestRevision": 18,
+  "outputs": [
+    {
+      "outputBinding": {
+        "glob": "abundance.tsv",
+        "sbg:inheritMetadataFrom": "#fastq_files"
+      },
+      "id": "#abundances_tsv",
+      "type": [
+        "null",
+        "File"
+      ],
+      "fileTypes": "txt",
+      "label": "abundances",
+      "description": "counts in tsv format"
+    }
+  ],
+  "sbg:modifiedOn": 1466029784,
+  "stdout": "",
+  "temporaryFailCodes": [],
+  "sbg:validationErrors": [],
+  "sbg:createdBy": "sdavis2",
+  "sbg:project": "sdavis2/target-osteo",
+  "sbg:sbgMaintained": false,
+  "sbg:id": "sdavis2/target-osteo/kallisto/18",
+  "requirements": [],
+  "stdin": "",
+  "sbg:job": {
+    "inputs": {
+      "fastq_files": [
+        {
+          "class": "File",
+          "size": 0,
+          "secondaryFiles": [],
+          "path": "/path/to/fastq_files-1.ext"
+        },
+        {
+          "class": "File",
+          "size": 0,
+          "secondaryFiles": [],
+          "path": "/path/to/fastq_files-2.ext"
+        }
+      ],
+      "kallisto_index": {
+        "class": "File",
+        "size": 0,
+        "secondaryFiles": [],
+        "path": "/path/to/kallisto_index.ext"
+      }
+    },
+    "allocatedResources": {
+      "mem": 8000,
+      "cpu": 1
+    }
+  },
+  "baseCommand": [
+    "kallisto",
+    "quant"
+  ],
+  "hints": [
+    {
+      "value": 1,
+      "class": "sbg:CPURequirement"
+    },
+    {
+      "value": 8000,
+      "class": "sbg:MemRequirement"
+    },
+    {
+      "class": "DockerRequirement",
+      "dockerPull": "insilicodb/kallisto",
+      "dockerImageId": ""
+    }
+  ],
+  "sbg:revisionsInfo": [
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 0,
+      "sbg:modifiedOn": 1466007623
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 1,
+      "sbg:modifiedOn": 1466008080
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 2,
+      "sbg:modifiedOn": 1466008086
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 3,
+      "sbg:modifiedOn": 1466008264
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 4,
+      "sbg:modifiedOn": 1466010109
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 5,
+      "sbg:modifiedOn": 1466010360
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 6,
+      "sbg:modifiedOn": 1466010830
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 7,
+      "sbg:modifiedOn": 1466011535
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 8,
+      "sbg:modifiedOn": 1466022368
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 9,
+      "sbg:modifiedOn": 1466022471
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 10,
+      "sbg:modifiedOn": 1466023152
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 11,
+      "sbg:modifiedOn": 1466024229
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 12,
+      "sbg:modifiedOn": 1466025971
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 13,
+      "sbg:modifiedOn": 1466026024
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 14,
+      "sbg:modifiedOn": 1466026680
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 15,
+      "sbg:modifiedOn": 1466027280
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 16,
+      "sbg:modifiedOn": 1466028189
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 17,
+      "sbg:modifiedOn": 1466028314
+    },
+    {
+      "sbg:modifiedBy": "sdavis2",
+      "sbg:revision": 18,
+      "sbg:modifiedOn": 1466029784
+    }
+  ],
+  "sbg:image_url": null,
+  "sbg:createdOn": 1466007623
+}

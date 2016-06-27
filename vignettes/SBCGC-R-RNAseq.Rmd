@@ -7,7 +7,10 @@ output:
   html_document:
     toc: true
     toc_float: true
- 
+vignette: >
+  %\VignetteIndexEntry{NCI-IRP Cancer Genomics Cloud Workshop - Using R for Seven Bridges CGC}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8} 
 ---
 
 This is the second workshop for the NCI Cancer Genomic Cloud Pilots. This document includes instructions to do the following tasks using the Seven Bridges API with the R client.  

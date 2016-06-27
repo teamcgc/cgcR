@@ -3,6 +3,10 @@ title: "Using Docker with Seven Bridges Genomics (SBG) CGC - Part 1"
 author: "Steve Tsang"
 date: "May 18, 2016"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Using Docker with Seven Bridges Genomics (SBG) CGC - Part 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 This workflow decribes the installation of Docker and run a tool using a Docker image in the SBG CGC image registry.
 

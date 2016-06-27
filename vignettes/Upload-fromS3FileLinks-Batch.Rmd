@@ -3,6 +3,10 @@ title: "get-http-Batch-infile"
 author: "Durga Addepalli"
 date: "May 13, 2016"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{get http batch infile example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}
