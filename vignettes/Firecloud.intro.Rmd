@@ -1,0 +1,150 @@
+---
+title: "Firecloud-Introduction"
+author: "Steve Tsang"
+date: "June 26, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br>
+<br>
+FireCloud, developed and maintained by the Broad Institute, is one of the three National Cancer Institute's Cancer Genomics Cloud Pilots.  <https://software.broadinstitute.org/firecloud/>.  This documment provides step-by-step description of creating a project on the FireCloud and upload RNA-seq (BAM) data.  Before completing this tutorial, please set up an user account and a billing account with the instructions on the Firecloud's website.
+
+#### Account registration
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-registration>
+
+#### Billing
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-google>
+
+#### FireCloud Basics
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-basics>
+
+#### Login
+<https://portal.firecloud.org/>  
+This tutorial is written using the *Google Chrome as browser*.
+
+1. Click "Sign In"
+2. Sign in with your google credential
+
+*Note*: If you have multiple google accounts, log in in an incognito window by clicking File -> New Incognito Window
+
+
+#### TCGA access
+
+After you log in, your profile is displayed.  
+If you have an NIH account, link your NIH account.
+
+1. Click "Log-In to NIH to re-link your account"
+2. Log in with your NIH credential
+
+*Note*: You will need to renew/re-link your account periodically
+
+
+#### Create and Share New Workspace
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-basics>
+The FireCloud world is organized into workspaces.  
+
+A workspace is a computational sandbox where you can organize genomic data and tools, and run analyses. Users can create, share, and clone workspaces. Workspaces hold:  
+
+- Data: pre-loaded or user-uploaded, open access or controlled access  
+- Workflows: pre-loaded or user-created  
+- Tools: pre-loaded or user-created  
+- Results: from all runs, captured with provenance  
+
+After you log in, your workspaces will be displayed.  Workspaces that are TCGA access-controlled are labeled "Restricted."
+
+To create a new workspace
+
+1. Click on the blue botton on the upper-right-hand-corner "Create New Workspace... +"
+2. Make sure it is in the correct Google Project linked to the billing account (Refer to the Billing section above)
+3. Enter workspace name "IRPworkshop"
+4. Enter workspace description, if any.
+5. If this project will contain TCGA control data, check the box "Workspace intended to contain NIH protected data." If not, leave it unchecked.
+6. Click "Create Workspace"
+
+Once a workspace is created, you can share with other users.
+Under "Summary" tab, under "Workspace Owner", you should see your gmail account listed.
+To share this workspace
+
+1. Click "(Sharing...)" next to the gmail account
+2. A pop-up window will appear
+3. Click "Add new +"
+4. Enter user gmail address
+5. Set access level for the user (OWNER, WRITER, READER, NO ACCESS)
+6. Click "Save"
+
+#### Upload my data to the FireCloud
+
+To upload file,
+
+1. Click on the line under "Google Bucket" which opens the Google Cloud Storage browser for this workspace
+2. You will be taken to the Google Cloud Platform
+3. Click "Upload Files"
+4. Select all the .bam and .bai files
+5. Click "Open"
+6. Multiple file tends to only upload 3 files simultaneously, repeat this process as necessary until all bam/bai files are uploaded and can be seen in the Google Console
+
+Once the files are uploaded to the Google console, you need to add them to the workspace.  
+To do this, you need two TSV files that describes the bam/bai files.  
+The first one, called "participants.tsv" has information about the participants and disease type.  
+ 
+  
+participant_id/sample_id fields are set arbitrarily and should be unique.  
+<br>
+participant.tsv
+```{}
+entity:participant_id	disease
+G28029	                BRCA
+G41676	                BRCA
+G41659	                LCLL
+G41707	                LCLL
+```
+
+The second one, called "sample.tsv" has information about the bam/bai files. sample.tsv has four columns, "sample_id", "BAM_index", "participant_id", and "BAM."   
+- "sample_id" is arbitrarily set and should be unique.  
+- "pariticpant_id" should match the participant_id in "participant.tsv" 
+- "BAM_index"/"BAM" are addresses where the bam/bai files are in the Google Cloud Storage.  
+
+The address should have the format "gs://[Google_Bucket]/[file_name]"  
+If your Google Bucket location is "fc-974b342c-b6f2-45e7-b901-xxxxxxxxxxxx" and file name is "NGS.bam", your address in that column should be "gs://c-974b342c-b6f2-45e7-b901-xxxxxxxxxxxx/NGS.bam"  For clarity, full file address is not listed below.
+
+sample.tsv  
+```{}
+entity:sample_id  BAM_index   	participant_id	BAM
+G28029_sample     bai_address1	G28029	        bam_address1  
+G41676_sample     bai_address2	G41676          bam_address2  
+G41659_sample     bai_address3	G41659	        bam_address3  
+G41707_sample     bai_address4  G41707	        bam_address4  
+
+```
+
+Once your have the two TSV files created, go back to the workspace.
+
+1. Click on "Data" tab
+2. Click "Import Data..."
+3. Click "Importa from file"
+4. Click "Choose file..."
+5. Select "participant.tsv" that you created above
+6. Click "Open"
+7. Click "Upload" and you should see a "Upload Successful" message
+
+1. Click "Import Data..."
+2. Click "Import from file"
+3. Click "Choose file..."
+4. Select "sample.tsv" that you created above
+5. Click "Open"
+6. Click "Upload" and you should see a "Upload Successful" message
+
+That's it.  You have uploaded the files to the workspace.  
+
+When you click on the address for the bam files, you will see 
+
+```{}
+Object: G28029_pe.Aligned.sortedByCoord.out.sorted.bam
+File size: 974.40 MBOpen (right-click to download)Warning: Downloading this file may incur a large data egress charge
+```
+Please note that uploading to the Firecloud is free, but you will be charged for downloading files.
+
+More to come later on running analysis with those uploaded files.

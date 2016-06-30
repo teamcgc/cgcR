@@ -3,6 +3,10 @@ title: "Using Docker with Seven Bridges Genomics (SBG) CGC - Part 1"
 author: "Steve Tsang"
 date: "May 18, 2016"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Using Docker with Seven Bridges Genomics (SBG) CGC - Part 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 This workflow decribes the installation of Docker and run a tool using a Docker image in the SBG CGC image registry.
 
@@ -41,15 +45,21 @@ brew install docker-machine
 
 ```{}
 docker-machine ls
+
+#if you do not have host named "dev"
+docker-machine create --driver virtualbox dev
+#if you have a host named "dev
 docker-machine start dev
+
 docker-machine regenerate-certs dev
 docker-machine env dev
 eval "$(docker-machine env dev)"
 ```
 
-To stop the machine called "dev"  
+To stop/remove the host called "dev" - skip this for now  
 ````{eval=FALSE}
 docker-machine stop dev
+docker-machine rm dev
 ````
 
 ### The Hello-world example 

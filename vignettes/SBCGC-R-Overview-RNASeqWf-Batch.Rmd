@@ -3,6 +3,10 @@ title: "SBCGC-R-CreateWorkflow"
 author: "Durga Addepalli"
 date: "May 2, 2016"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{SBCGC R Create Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -13,7 +17,7 @@ library(sevenbridges)
 
 # INTRODUCTION
 
-This guide will get you started to use Seven Bridges API with the R client package sbgr, and guide you through the steps needed to run the "RNA-seq Alignment - STAR" and RNA-Seq alignment pipeline on the Seven Bridges Genomics platform.
+This guide will get you started to use Seven Bridges API with the R client package sevenbridges, and guide you through the steps needed to run the "RNA-seq Alignment - STAR" and RNA-Seq alignment pipeline on the Seven Bridges Genomics platform.
 
 The following primary steps will be included:
 
