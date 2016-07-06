@@ -425,7 +425,7 @@ tsk3$update()
 tsk3$monitor()
 ```
 
-## BATCH - Running the RNA-Seq Alignment STAR which takes multiple BAM file as input
+## BATCH - Running the RNA-Seq Alignment STAR which takes multiple BAM files as input
 ```{r}
 ## Copy the app
 ## another app for batch
