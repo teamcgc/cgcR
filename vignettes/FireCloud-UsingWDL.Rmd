@@ -1,0 +1,134 @@
+---
+title: "FireCloud-intro2-Using WDL"
+author: "Steve Tsang"
+date: "July 5, 2016"
+output: html_document
+---           
+This tutorial provides the steps for creating a WiDdLe (WDL) file to run analysis on the FireCloud.  A basic introduction to the FireCloud can be found here - https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd  
+
+This example is similar to another tutorial created for the Seven Bridges Genomic (SB-CGC) platform - https://github.com/teamcgc/cgcR/blob/master/vignettes/UsingDocker.Part1.Rmd  
+
+
+#### What is WDL?
+
+WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to 1) install everything you need to start writing and running WDL; 2) generate a JSON from WDL; 3) executing a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.
+
+References  
+<https://software.broadinstitute.org/wdl/userguide/index>  
+<https://github.com/broadinstitute/wdltool>  
+<br>
+
+#### Installing everything you need to write and run WDL
+
+##### Install JAVA, cromwell, sbt, and wdltool
+```{}
+ brew install Caskroom/cask/java
+ brew install cromwell
+ brew install sbt
+ 
+git clone https://github.com/broadinstitute/cromewell
+sbt assembly
+# `sbt assembly` will build a runnable JAR in `target/scala-2.11/cromwell-0.20.jar`
+
+git clone https://github.com/broadinstitute/wdltool
+sbt assembly
+# `sbt assembly` will build a runnable JAR in `target/scala-2.11/wdltool-0.5.jar`
+
+```
+
+##### Get the latest Ubuntu docker image
+Please refer to https://github.com/teamcgc/cgcR/blob/master/vignettes/UsingDocker.Part1.Rmd for using Docker
+
+```{}
+docker-machine start dev
+docker-machine regenerate-certs dev
+docker-machine env dev
+eval $(docker-machine env dev)
+docker pull ubuntu:latest
+```
+<br>
+#### Creating a WDL script
+This WDL script use the command "grep" to find a string pattern in an input file.
+
+Copy-and-paste the text below to a file named "grep.test.wdl"
+```{}
+task grep {
+  
+  String pattern
+  File in_file
+  
+  command {
+    grep '${pattern}' ${in_file}
+  }
+  output {
+    File response = stdout()
+  }
+}
+
+workflow test {
+  call grep
+}
+```
+
+##### Use wdltool to create json file that defines the search pattern ("KX") and input file ("temp.fasta").
+
+The content of the input file ("temp.fasta") is
+```{}
+>gb:KU991811|Organism:Zika virus Brazil/2016/INMI1-Asian|Segment:null|Subtype:Asian|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVSPFGGLKRLPAGLLLGHGPI
+
+>gb:KU955590|Organism:Zika virus Z16019-Asian|Segment:null|Subtype:Asian|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVSPFGGLKRLPAGLLLGHGPI
+
+>gb:KU922960|Organism:Zika virus MEX/InDRE/Sm/2016-Asian|Segment:null|Subtype:Asian|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVSPFGGLKRLPAGLLLGHGPI
+
+>gb:KX056898|Organism:Zika virus Zika virus/GZ02/2016-Asian|Segment:null|Subtype:Asian|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVSPFGGLKRLPAGLLLGHGPI
+
+>gb:KU922923|Organism:Zika virus MEX/InDRE/Lm/2016-Asian|Segment:null|Subtype:Asian|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVSPFGGLKRLPAGLLLGHGPI
+
+>gb:KU963574|Organism:Zika virus ZIKV/Homo sapiens/NGA/IbH-30656_SM21V1-V3/1968-West_African|Segment:null|Subtype:West_African|Host:Human
+MKNPKKKSGGFRIVNMLKRGVARVNPLGGLKRLPAGLLLGHGPI
+```
+
+In this example, the tool searches input file for a string "KX" and outputs the line containing the string.
+
+##### Create a json file to define the search pattern and input file
+
+```{}
+java -jar wdltool/target/scala-2.11/wdltool-0.5.jar inputs grep.test.wdl > grep.test.json
+```
+
+Modify the json file so it looks like -
+```{}
+{
+  "test.grep.pattern": "KX",
+  "test.grep.in_file": "temp.fasta"
+}
+```
+
+
+#### Run the WDL script
+
+```{}
+java -jar cromwell/target/scala-2.11/cromwell-0.20.jar run grep.test.wdl grep.test.json
+```
+
+Last few lines of the run should look like this -
+```{}
+  {
+  "outputs": {
+    "test.grep.response": "cromwell-executions/test/13f69bf7-449b-4e24-a324-bdf579c7ef07/call-grep/stdout"
+  },
+  "id": "13f69bf7-449b-4e24-a324-bdf579c7ef07"
+}
+[2016-07-05 19:10:24,57] [info] SingleWorkflowRunnerActor workflow finished with status 'Succeeded'.
+````
+
+An output file is created at this location "cromwell-executions/test/13f69bf7-449b-4e24-a324-bdf579c7ef07/call-grep/stdout"  
+The content of the output file is
+```{}
+>gb:KX056898|Organism:Zika virus Zika virus/GZ02/2016-Asian|Segment:null|Subtype:Asian|Host:Human
+````
