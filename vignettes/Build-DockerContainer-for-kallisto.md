@@ -24,7 +24,7 @@ git clone https://github.com/InSilicoDB/docker-kallisto.git kallisto-test
 
 cd kallisto-test
 
-##  Build a new image from the source code in this directory witht he name 'kallisto' and version '0'
+##  Build a new image from the source code in this directory with the name 'kallisto' and version '0'
 docker build -t kallisto:v0 .
 
 ## Once the build is done, you will need to get the Image id of the container and run the following command to be able to run kallisto
@@ -34,9 +34,14 @@ docker run -it kallisto:v0
 docker push durgaadd/kallisto:v0
 
 ```
+Run kallisto by running the docker image, this will get you to the bash command prompt of the kallisto container
 
+```
+docker run -it kallisto:v0
 
-## Mounting a volume (mounitng a local directory onto the docker container)
+```
+
+## Mounting a volume (mounitng a local directory onto the docker container, for getting input files to run kallisto)
 
 To mount a local directory onto the docker container, we need to edit the Docker file and add the following RUN command
 ```
