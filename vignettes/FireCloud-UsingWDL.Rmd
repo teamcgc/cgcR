@@ -11,17 +11,21 @@ This example is similar to another tutorial created for the Seven Bridges Genomi
 
 #### What is WDL?
 
-WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to 1) install everything you need to start writing and running WDL; 2) generate a JSON from WDL; 3) executing a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.
+WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to:
 
-References  
-<https://software.broadinstitute.org/wdl/userguide/index>  
-<https://github.com/broadinstitute/wdltool>  
+1. install everything you need to start writing and running WDL
+2. generate a JSON from WDL
+3. execute a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.
+
+##### References  
+- <https://software.broadinstitute.org/wdl/userguide/index>  
+- <https://github.com/broadinstitute/wdltool>  
 <br>
 
 #### Installing everything you need to write and run WDL
 
 ##### Install JAVA, cromwell, sbt, and wdltool
-```{}
+```{sh}
  brew install Caskroom/cask/java
  brew install cromwell
  brew install sbt
