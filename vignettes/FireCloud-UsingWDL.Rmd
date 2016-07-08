@@ -2,7 +2,7 @@
 title: "FireCloud-intro2-Using WDL"
 author: "Steve Tsang"
 date: "July 5, 2016"
-output: pdf_document
+output: html_document
 ---           
 This tutorial provides the steps for creating a WiDdLe (WDL) file to run analysis on the FireCloud.  A basic introduction to the FireCloud can be found here - https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd  
 
@@ -11,37 +11,23 @@ This example is similar to another tutorial created for the Seven Bridges Genomi
 
 #### What is WDL?
 
-<<<<<<< HEAD
-WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to   
-1) install everything you need to start writing and running WDL.
-2) generate a JSON from WDL.  
-3) executing a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.  
-=======
-WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to:
->>>>>>> b36fcd637e3ec9db17aa552a3877c35585010b76
+WiDdLe (WDL) is a Workflow Description Language developed by the Data Science & Data Engineering group at Broad Institute.  It is used to describe tasks and workflow on the FireCloud.  This tutorial will demonstrate how to    
+1) install everything you need to start writing and running WDL.  
+2) generate a JSON from WDL.   
+3) executing a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.    
 
-1. install everything you need to start writing and running WDL
-2. generate a JSON from WDL
-3. execute a WDL script, focusing on using Broad Institute's execution engine, which is called Cromwell.
-
-##### References  
-- <https://software.broadinstitute.org/wdl/userguide/index>  
-- <https://github.com/broadinstitute/wdltool>  
+References  
+<https://software.broadinstitute.org/wdl/userguide/index>  
+<https://github.com/broadinstitute/wdltool>  
 <br>
 
 #### Installing everything you need to write and run WDL
 
 ##### Install JAVA, cromwell, sbt, and wdltool
-```{sh}
-<<<<<<< HEAD
+```{}
 brew install Caskroom/cask/java
 brew install cromwell
 brew install sbt
-=======
- brew install Caskroom/cask/java
- brew install cromwell
- brew install sbt
->>>>>>> b36fcd637e3ec9db17aa552a3877c35585010b76
  
 git clone https://github.com/broadinstitute/cromewell
 sbt assembly
@@ -56,7 +42,7 @@ sbt assembly
 ##### Start Docker - we will be using the latest Ubuntu image
 Please refer to https://github.com/teamcgc/cgcR/blob/master/vignettes/UsingDocker.Part1.Rmd for using Docker
 
-```{sh}
+```{}
 docker-machine start dev
 docker-machine regenerate-certs dev
 docker-machine env dev
@@ -118,7 +104,7 @@ In this example, the tool searches input file for a string "KX" and outputs the 
 
 ##### Create a json file to define the search pattern and input file
 
-```{sh}
+```{}
 java -jar wdltool/target/scala-2.11/wdltool-0.5.jar inputs grep.test.wdl > grep.test.json
 ```
 
@@ -133,7 +119,7 @@ Modify the json file so it looks like -
 
 #### Run the WDL script
 
-```{sh}
+```{}
 java -jar cromwell/target/scala-2.11/cromwell-0.20.jar run grep.test.wdl grep.test.json
 ```
 
