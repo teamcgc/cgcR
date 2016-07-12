@@ -60,16 +60,12 @@ task kallisto {
         File inkal
 
         command {
-
-		  kallisto index -i kalout.idx ${inkal}
-
-		 }
-
+		             kallisto index -i kalout.idx ${inkal}
+            		}
         runtime
                 {
                 docker : "durgaadd/kallisto:0.43.0"
                 }
-
         output {
                 File response = stdout()
                 }
@@ -81,10 +77,9 @@ workflow kalWF
         File inkal
 
         call kallisto {
-                input:
+                        input:
                         inkal=inkal
-                }
-
+                      }
         }
 ```
 
