@@ -5,13 +5,13 @@ date: "July 12, 2016"
 output: html_document
 ---
 ## Introduction
-This tutorial provides the steps for running the tool 'kallisto' by creating a WiDdLe (WDL) file to run analysis on the FireCloud and follows the tutorial 'A basic introduction to the FireCloud' which can be found [here] {https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd}
+This tutorial provides the steps for running the tool 'kallisto' by creating a WiDdLe (WDL) file to run analysis on the FireCloud and follows the tutorial 'A basic introduction to the FireCloud' which can be found https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd
 
 This tutorial assumes you have all the dependencies listed in the basic introduction to run the WDL tool and Cromwell.
 
 To rerun the basic requirements run the following commands:
 
-```{r}
+```
 brew install Caskroom
 brew install cask
 
@@ -35,7 +35,7 @@ Docker needs to be running, so as to pull the docker image of the tool kallisto,
 
 If you have the Docker toolbox installed you could just run this tutotrial on the Docker quickstart terminal. If you have the docker machine installed run the following commands:
 
-```{r}
+```
 docker-machine start dev
 docker-machine regenerate-certs dev
 docker-machine env dev
@@ -54,7 +54,7 @@ Below is a simple WDL script (kallisto.test.wdl) for running kallisto commands. 
 - the output format
 - Creating a workflow (called kalWF) which calls the task 'kallisto'
 
-```{r}
+```
 task kallisto {
 
         File inkal
@@ -85,7 +85,7 @@ workflow kalWF
 
 The input file for this kallisto command is a fasta file (inkal.fasta), which is like this:
 
-```{r}
+```
 >GENSCAN00000000001 cdna:genscan chromosome:GRCh38:5:122151991:122153085:1 transcript_biotype:protein_coding
 ATGGAAAGAGGAAAGAAGAAAAGAATTTCCAATAAGTTACAACAAACTTTTCACCATTCTAAAGAACCCACTTTCCTTATCAACCAAGCTGGGCTTCTCTCTAGTGACTCCTATTCTAGC
 >GENSCAN00000000002 cdna:genscan chromosome:GRCh38:5:122675795:122676286:1 transcript_biotype:protein_coding
@@ -114,13 +114,13 @@ ATGGCACAAGTTGCAGTTTCCACCCTGCCCATTGAAGATGAGGAGTCTGTTGAAGATGAGGAGTCCTTGGAGAGCAGGAT
 
 Once you have the docker running, the kallisto.test.wdl file and the input file, run the following command
 
-```{r}
+```
 java -jar wdltool/target/scala-2.11/wdltool-0.5.jar inputs kallisto.test.wdl > kallisto.test.json
 ```
 
 The wdltool here creates a json file which defines the inputs, it includes theworkflow name and the inputs. It looks like below:
 
-```{r}
+```
 {
   "kalWF.inkal": "File"
 }
@@ -128,19 +128,19 @@ The wdltool here creates a json file which defines the inputs, it includes thewo
 ```
 
 THE Json NEEDS TO BE MODIFIED and the input file specified (I used the vi editor):
-```{r}
+```
 {
   "kalWF.inkal": "inkal.fasta"
 }
 ```
 
 Run the WDL
-```{r}
+```
 java -jar cromwell/target/scala-2.11/cromwell-0.20.jar run kallisto.test.wdl kallisto.test.json
 ```
 
 A successful run would have the following lines at the end of the run:
-```{r}
+```
 [2016-07-12 11:01:55,21] [info] WorkflowManagerActor Workflow 989b788d-b7d2-4ef6-bce3-6d4c2372d17c succeeded!
 [2016-07-12 11:01:55,21] [info] WorkflowManagerActor WorkflowActor-989b788d-b7d2-4ef6-bce3-6d4c2372d17c is in a terminal state: WorkflowSucceededState
 {
