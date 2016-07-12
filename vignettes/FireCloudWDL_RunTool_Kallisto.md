@@ -5,7 +5,7 @@ date: "July 12, 2016"
 output: html_document
 ---
 ## Introduction
-This tutorial provides the steps for running the tool 'kallisto' by creating a WiDdLe (WDL) file to run analysis on the FireCloud and follows the tutorial 'A basic introduction to the FireCloud' which can be found https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd
+This tutorial provides the steps for running the tool 'kallisto' by creating a WiDdLe (WDL) file to run analysis on the FireCloud and follows the tutorial 'A basic introduction to the FireCloud' which can be found at https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd
 
 This tutorial assumes you have all the dependencies listed in the basic introduction to run the WDL tool and Cromwell.
 
@@ -153,6 +153,6 @@ A successful run would have the following lines at the end of the run:
 ```
 
 Kallisto index - produces a index file (with file name 'kalout.idx' specified in the command) in the output directory under /cromwell-executions mentioned inthe last few lines of the run, which can then be used to quantify abundances of the transcripts.
-See [kallisto] {https://pachterlab.github.io/kallisto/} for furhter details.
+See https://pachterlab.github.io/kallisto/ for more details about running kallisto.
 
 ---- More coming soon
