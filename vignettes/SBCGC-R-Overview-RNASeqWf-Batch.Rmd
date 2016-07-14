@@ -66,7 +66,7 @@ browseVignettes(package = 'sevenbridges')
 
 ### Register on NCI Cancer Genomics Cloud
 
-![cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
+[cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
 
 You can find login/registration on NCI [Cancer Genomics Cloud homepage](http://www.cancergenomicscloud.org/), follow the [signup tutorial](http://docs.cancergenomicscloud.org/docs/sign-up-for-the-cgc) if you have an ERA Commons or NIH account.
 
@@ -80,7 +80,7 @@ The final goal is make a workflow that accepts one file per sample (or two files
 
 The final workflow looks like this, it's composed of two tools: Picard SAM to Fastq command line tool and STAR alignment tool.
 
-![quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
+[quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
 
 ### Create a project on your account via API R client
 
