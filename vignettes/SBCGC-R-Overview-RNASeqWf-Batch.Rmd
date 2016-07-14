@@ -24,7 +24,7 @@ The following primary steps will be included:
 * uploading files and setting the metadata;
 * running the Picard SAMtoFASTQ commandline tool;
 * running the RNA-seq Alignment on STAR; 
-* downloading the results.
+
 
 # First Steps
 
@@ -66,7 +66,7 @@ browseVignettes(package = 'sevenbridges')
 
 ### Register on NCI Cancer Genomics Cloud
 
-[cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
+![cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
 
 You can find login/registration on NCI [Cancer Genomics Cloud homepage](http://www.cancergenomicscloud.org/), follow the [signup tutorial](http://docs.cancergenomicscloud.org/docs/sign-up-for-the-cgc) if you have an ERA Commons or NIH account.
 
@@ -80,7 +80,7 @@ The final goal is make a workflow that accepts one file per sample (or two files
 
 The final workflow looks like this, it's composed of two tools: Picard SAM to Fastq command line tool and STAR alignment tool.
 
-[quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
+![quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
 
 ### Create a project on your account via API R client
 
@@ -106,12 +106,12 @@ To create a project, you need to know your billing group id, cost related to thi
 ## a single billing group is shown
 ```
 
-Now let's create a new project called "IRP-CGC-with-R", save it to a 'p' object for convenient usage for any call related to this project.
+Now let's create a new project called "IRP-CGC-Workshop2", save it to a 'p' object for convenient usage for any call related to this project.
 
 ```{r}
-(p <- a$project_new("IRP-CGC-with-R", 
+(p <- a$project_new("IRP-CGC-Workshop2", 
                     billing_group_id = b$id, 
-                    description = "This project is for IRP-CGC R-Workshop"))
+                    description = "This project is from IRP-CGC Workshop at CBIIT"))
 ```
 
 Now check it on CGC, you will see a fresh new project is created. 
@@ -148,10 +148,10 @@ To delete it, just call, but I will suggest you keep it for following tutorial :
 
 ```{r}
 ## remove it, not run
-a$project("IRP-CGC-with-R")$delete()
+a$project("IRP-CGC-Workshop2")$delete()
 ## check
 ## will delete all projects matcht the name
-delete(a$project("IRP-CGC-with-R_donnot_delete_me"))
+delete(a$project("IRP-CGC-Workshop2_donnot_delete_me"))
 ```
 
 
@@ -206,16 +206,16 @@ p$file()
 Note: the delete action only works for single file now, make sure your file call returns a single file not a file list.
 ```{r}
 ## Delete file
-a$project("IRP-CGC-with-R")$file()[[1]]$delete()
+a$project("IRP-CGC-Workshop2")$file()[[1]]$delete()
 ## confirm the deletion
-a$project("IRP-CGC-with-R")$file()
+a$project("IRP-CGC-Workshop2")$file()
 
 ## Search for specific file by pattern match and delete, this can delete multiple files too.
-a$project("IRP-CGC-with-R")$file("Readspergene")$delete()
+a$project("IRP-CGC-Workshop2")$file("Readspergene")$delete()
 
 ```
 
-## Lets Copy some Apps into our Project IRP-CGC-with-R
+## Lets Copy some Apps into our Project IRP-CGC-Workshop2
 ### First lets search for the Apps
 You can list all Apps available to you.
 ```{r}
@@ -460,6 +460,14 @@ tsk3 <- p$task(status = "draft")
 tsk3$run()
 tsk3$update()
 tsk3$monitor()
+```
+## Download the results
+
+```{r}
+setTaskHook("completed", function(){
+    tsk3$download("~/Downloads")
+})
+tsk$monitor()
 ```
 
 
