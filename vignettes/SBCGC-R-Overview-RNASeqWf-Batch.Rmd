@@ -1,36 +1,21 @@
 ---
-title: "SBCGC-R-CreateWorkflow"
+title: "SB-CGC-Overview-RNASeq-WF-WS2.rmd"
 author: "Durga Addepalli"
-date: "May 2, 2016"
+date: "May 02, 2016"
 output: html_document
-vignette: >
-  %\VignetteIndexEntry{SBCGC R Create Workflow}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-
-```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-library(sevenbridges)
-```
 
 # INTRODUCTION
 
-This guide will get you started to use Seven Bridges API with the R client package sevenbridges, and guide you through the steps needed to run the "RNA-seq Alignment - STAR" and RNA-Seq alignment pipeline on the Seven Bridges Genomics platform.
+This guide will get you started to use Seven Bridges API with the R client package sbgr, and guide you through the steps needed to run the "RNA-seq Alignment - STAR" and RNA-Seq alignment pipeline on the Seven Bridges Genomics platform.
 
-The following primary steps will be included:
+The following primary steps will be covered:
+-	Getting access to SB CGC
+-	Setting up and sharing projects 
+-	File management
+-	running the tools and workflows 
+-	downloading the results.
 
-* uploading files and setting the metadata;
-* running the Picard SAMtoFASTQ commandline tool;
-* running the RNA-seq Alignment on STAR; 
-* downloading the results.
-
-# First Steps
-
-First download the [R markdown file]
-(https://raw.githubusercontent.com/tengfei/sevenbridges/master/vignettes/bioc-workflow.Rmd) of this page, so you can load it to yoru Rstudio 
-or your favorite R IDE to run through all examples and tweak setup.
+## download the [R markdown file] and load it to your Rstudio or your favorite R IDE.
 
 ```{r}
 download.file("https://github.com/teamcgc/teamcgc.github.io/....SBCGC-R-CreateWorkflow.Rmd", destfile = "~/bioc-workflow.Rmd")
@@ -38,27 +23,28 @@ download.file("https://github.com/teamcgc/teamcgc.github.io/....SBCGC-R-CreateWo
 
 ## Installing the Package
 
-To download and install the sevenbridges package from Bioconductor, type the following commands in R:
+Download and install the sevenbridges package from Bioconductor
 
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-biocLite("sbgr")
+useDevel(devel = TRUE)
+biocLite("sevenbridges")
 ```
 
-Alternatively, you can install the cutting-edge development version of the sbgr package from GitHub:
+Alternatively, If you cannot install it because you are not running latest R, you can install the package from github:
 
 ```{r}
-if(!require("devtools", quietly = TRUE)){
-    install.packages("devtools") 
-}
 ## Install from github for development version  
+# install.packages("devtools") if devtools was not installed
 source("http://bioconductor.org/biocLite.R")
-devtools::install_github("tengfei/sevenbridges", build_vignettes=TRUE, 
+# install.packages("devtools") if devtools was not installed
+library(devtools)
+install_github("sbg/sevenbridges-r", build_vignettes=TRUE, 
   repos=BiocInstaller::biocinstallRepos(),
   dependencies=TRUE)
 ```
 
-After the installation you can always browser vignette
+## you can always browse the vignette
 
 ```{r}
 browseVignettes(package = 'sevenbridges')
@@ -66,64 +52,66 @@ browseVignettes(package = 'sevenbridges')
 
 ### Register on NCI Cancer Genomics Cloud
 
-![cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
-
 You can find login/registration on NCI [Cancer Genomics Cloud homepage](http://www.cancergenomicscloud.org/), follow the [signup tutorial](http://docs.cancergenomicscloud.org/docs/sign-up-for-the-cgc) if you have an ERA Commons or NIH account.
 
-### Get your authentifiation
-
+### Get your authentication Token
 After you login, you can get your authentication under your account setting and 'developer' tab [tutorial](http://docs.cancergenomicscloud.org/docs/get-your-authentication-token)
 
-## Quickstart
 
-The final goal is make a workflow that accepts one file per sample (or two files for paired-end data), GTF file,genome Fasta files and generate aligned reads, de novo canonical junctions, non-canonical splices, and chimeric (fusion) transcripts. 
-
-The final workflow looks like this, it's composed of two tools: Picard SAM to Fastq command line tool and STAR alignment tool.
-
-![quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
-
-### Create a project on your account via API R client
+### Create a project under your account via API R client
 
 Now lets use the 'sevenbridges' packages you just installed to create a project.
 
-First step to do is to create an _Auth_ object, almost everything starts from this object. SB-CGC API client follows a pattern like "Auth$properties$action".
+###create an _Auth_ object in order to create a project
 
-On the SB platform/CGC GUI, Auth is your account, and it contains projects, billing groups, users, project contains tasks, apps, files etc, so it's easy to imagine your API call.
+Almost everything starts from this object.
 
-To create Auth, just pass token and url, by default url is set to CGC.  
+On the SB platform/CGC GUI, Auth is your account, and it contains 
+-	projects, 
+-	billing groups, 
+-	users / collaborations
+-	project contains tasks, apps, files etc. 
+
 To create an Auth object, run the command below and replace "fake_token" with your own token.
 
 ```{r}
+library(sevenbridges)
 a <- Auth(token = "fake_token", url = "https://cgc-api.sbgenomics.com/v2/")
 ```
 
-Alternatively you can save your authentication cross different platforms in a configuration file called ".sbg.auth.yml" at home folder. This allow you to manage multiple users on multiple platforms.
-
 To create a project, you need to know your billing group id, cost related to this project will be charged from this billing group.
+-	FOR THIS workshop – free credits
 
 ```{r}
 (b <- a$billing())
-## a single billing group is shown
+a$billing(id = b$id, breakdown = TRUE)
 ```
 
-Now let's create a new project called "IRP-CGC-with-R", save it to a 'p' object for convenient usage for any call related to this project.
+## Infomation about a user
+
+This call returns information about your account.
+```{r}
+a$user()
+```
+
+Now let's create a new project called "IRP-SBCGC-WS2", save it to a 'p' object for convenient usage for any call related to this project.
 
 ```{r}
-(p <- a$project_new("IRP-CGC-with-R", 
-                    billing_group_id = b$id, 
-                    description = "This project is for IRP-CGC R-Workshop"))
+(p <- a$project_new("IRP-SBCGC-WS2", b$id, 
+                    description = "This project is for IRP-CGC R-Workshop@CBIIT"))
 ```
 
 Now check it on CGC, you will see a fresh new project is created. 
 
-![NewProject](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/NewProject.png)
 
 ### List all Projects
 This call returns a list of all projects you are a member of. Each project’s project_id and URL on the CGC will be returned.
 ```{r}
 a$project()
 ```
-Then if you want to list the projects owned by and accessible to a particular user, specify the owner argument. Each project’s ID and URL will be returned.
+
+
+To list the projects owned by and accessible to a particular user
 
 ```{r}
 a$project(owner = "Durga")
@@ -133,12 +121,14 @@ To get details about project(s), use detail = TRUE
 
 ```{r}
 a$project(detail = TRUE)
+a$project(owner ="sdavis2", detail = TRUE)
 ```
 
-### Partial Match Project Name
+### Search by Partial Match Project Name
 SB CGC also supports partial name match in this interface. The first argument for the call is “name”, users can provide part of the name.
+
 ```{r}
-a$project("hello")
+a$project("data")
 ```
 
 ### Delete a Project
@@ -147,76 +137,116 @@ Only single project could be deleted by call $delete(), so please pay attention 
 To delete it, just call, but I will suggest you keep it for following tutorial : ) 
 
 ```{r}
-## remove it, not run
-a$project("IRP-CGC-with-R")$delete()
-## check
-## will delete all projects matcht the name
-delete(a$project("IRP-CGC-with-R_donnot_delete_me"))
+a$project("IRP-SBCGC-WS2")$delete()
+
+## will delete all projects matching the name
+delete(a$project("IRP-SBCGC-WS2_donnot_delete_me"))
 ```
 
-
 ### List all Files
-This call returns a list of all files in a specified project that you can access. For each file, the call returns: 
+For each file, the call returns: 
 * Its ID,
 * Its filename. 
 The project is specified as a query parameter in the call.
-To list all the files in the current project:
 ```{r}
 p$file()
 ```
 
-To list all files belonging to a project (Workshop Demo):
+To list all files belonging to a project (irp-cgc-with-r):
 ```{r}
-n <- a$project(name = "Workshop Demo")
-a$file(project = n$id)
-a$file("Readspergene", project = n$id, detail = TRUE)
+n <- a$project(id = "Durga/irp-cgc-with-r")
+n$file()
+
+n$file("bam", project = n, detail = TRUE)
 ```
 
+### Copy file/s
 
-### Copy a file or group of files
+-	Files retain their metadata when copied, but 
+-	may be assigned new names in their target project.
+-	Controlled Data files may NOT be copied to Open Data projects. 
+o	To make this call, you should have copy permission within the project you are copying from.
 
-This call copies the specified file to a new project. Files retain their metadata when copied, but may be assigned new names in their target project.
-
-Note that Controlled Data files may not be copied to Open Data projects. To make this call, you should have copy permission within the project you are copying from.
-
-Let’s try to copy a file from CGC public files, the id you can tell from the url is “561e1b33e4b0aa6ec48167d7”
+Let’s try to copy a file from DemoData
 
 You must provide
-
 * id file id, or list/vector of files ids.
 * project parameter: project id.
-* name is optional, if omitted, use the same.
 
 To copy a single file
 ```{r}
-fid <- "56d5dd4be4b038b4e319be9b"
-a$project("Workshop Demo")$file(id = fid)$copyTo(pid)
+pid <- a$project("IRP-SBCGC-WS2")$id
+fid <- "56f4592ae4b070c30853bbcb"
+a$project("DemoData")$file(id = fid)$copyTo(pid)
 ```
 To Copy multiple files
 ```{r}
-fid <- "56d5dd4be4b0f636ff14cb69"
-fid2 <- "56d5dd4be4b0ac987e61af8e"
-pid <- a$project("Workshop Demo")$id
-a$copyFile(c(fid, fid2), project = pid)
+fid <- "5788524ce4b035347bd5c54c"
+fid2 <- "57884b7fe4b01d432ccb8d97"
+fid3 <- "57885ecce4b035347bd5c553"
+a$copyFile(c(fid, fid2, fid3), project = pid)
 p$file()
 ```
 
 ### Delete file(s)
 
-Note: the delete action only works for single file now, make sure your file call returns a single file not a file list.
 ```{r}
 ## Delete file
-a$project("IRP-CGC-with-R")$file()[[1]]$delete()
+a$project("IRP-SBCGC-WS2")$file()[[1]]$delete()
 ## confirm the deletion
-a$project("IRP-CGC-with-R")$file()
+a$project("IRP-SBCGC-WS2")$file()
 
 ## Search for specific file by pattern match and delete, this can delete multiple files too.
-a$project("IRP-CGC-with-R")$file("Readspergene")$delete()
+a$project("IRP-SBCGC-WS2")$file("bam")$delete()
+
+## You can also delete a group of files or FilesList object, be careful with this function!
+a$project("IRP-SBCGC-WS2")$file("bam")
+
+## delete all of them
+delete(a$project("IRP-SBCGC-WS2")$file("fastq"))
+a$project("IRP-SBCGC-WS2")$file("fastq")
+```
+
+### Download Files: To get the download information, basically a url, please use
+```{r}
+a$project("IRP-SBCGC-WS2")$file(id = "56f4592ae4b070c30853bbcb")$download_url()
+
+## To download directly from R, use download call directly from single File object.
+fid <- a$project("IRP-SBCGC-WS2")$file(id ="56f4592ae4b070c30853bbcb")$id
+a$project("IRP-SBCGC-WS2")$file(id = fid)$download("~/Downloads/")
+
+##To download all files from a project.
+a$project("IRP-SBCGC-WS2")$download("~/Downloads")
+
+## Use download function for FilesList object to save your time
+fls <- a$project("IRP-SBCGC-WS2")$file()
+download(fls, "~/Downloads/")
 
 ```
 
-## Lets Copy some Apps into our Project IRP-CGC-with-R
-### First lets search for the Apps
+### Upload Files
+Seven Bridges platforms provide couple different ways for data import
+•	command line uploader
+•	graphic UI uploader
+•	from ftp, http etc from interface directly
+•	api uploader that you can directly call with sevenbridges package
+API client uploader is working like this, simply call project$upload function to upload a file a file list or a folder recursively…
+
+```{r}
+fl <- system.file("extdata", "sample1.fastq", package = "sevenbridges")
+
+## by default load .meta for the file
+p$upload(fl, overwrite = TRUE)
+## pass metadata
+p$upload(fl, overwrite = TRUE, metadata = list(library_id = "testid2", platform = "Illumina x11"))
+## rename
+p$upload(fl, overwrite = TRUE, name = "sample_new_name.fastq", 
+         metadata = list(library_id = "new_id"))
+```
+
+
+
+## Lets Search and Copy some Apps into our Project IRP-SBCGC-WS2
 You can list all Apps available to you.
 ```{r}
 a$app()
@@ -224,7 +254,7 @@ a$app()
 a$app(detail = TRUE)
 ```
 
-You can serach by name, partial name or ID
+You can search by name, partial name or ID
 ```{r}
 ## pattern match
 a$app(name = "get_http")
@@ -236,21 +266,20 @@ a$app(id = "tsang/temp/txfr")
 a$app(id = aid, revision = 0)
 ```
 
-To list all apps belong to one project use project argument
+To list all apps belonging to one project use project argument
 ```{r}
-a$project("Workshop Demo")$app()
+a$project("irp-cgc-with-r")$app()
 
 ## or alternatviely
-pid <- a$project("Workshop Demo")$id
 a$app(project = pid)
 ```
 
-To run this workflow, we need two apps in our project:
+To run the example RNA-Seq alignment STAR workflow, we need two apps in our project:
 * get-http_file
 * RNA-Seq Alignment STAR
 
 ### Copy these Apps to your Project
-This call copies the specified app to the specified project. The app should be one in a project that you can access; this could be an app that has been uploaded to the CGC by a project member, or a publicly available app that has been copied to the project.
+This call copies the specified app to the specified project. The app should be from a project that you can access; this could be an app that has been uploaded to the CGC by a project member, or a publicly available app that has been copied to the project.
 
 Need two arguments
 * project: id character
@@ -258,18 +287,18 @@ Need two arguments
 
 Copy app "get-http_file" 
 ```{r}
-app.gets3fl <- a$copyApp(id =  "tsang/temp/txfr/2", project = pid, name = "copytxfrv2")
+app.gets3fl <- a$copyApp(id =  "Durga/irp-cgc-with-r/Get-http-file-WS2", project = pid, name = "get-http-f-WS2")
 apid <- app.gets3fl$id
 ## check it is copied
 a$app(project = pid)
 ```
 
 
-Search and copy the PUBLIC workflow RNA-Seq Alignment STAR
+### Search and copy the PUBLIC workflow RNA-Seq Alignment STAR
 ```{r}
 a$app("STAR", visibility = "public", complete = TRUE)
 
-app.rnawf <- a$copyApp(id =  "djordje_klisic/public-apps-by-seven-bridges/rna-seq-alignment-star/3", project = pid, name = "star-wfl-copy")
+app.rnawf <- a$copyApp(id =  "djordje_klisic/public-apps-by-seven-bridges/rna-seq-alignment-star/3", project = pid, name = "STAR-WF-WS2")
 
 rwid <- app.rnawf$id
 ## check it is copied
@@ -283,13 +312,13 @@ Here we demonstrate how to upload files directly from a S3 bucket to your CGC pr
 
 To create a draft task, you need to call the task_add function from Project object. And you need to pass following arguments
 
-name: name for this task
-description: description for this task
-app: app id you have access to
-inputs: inputs list for this task
+-	name: name for this task
+-	description: description for this task
+-	app: app id you have access to
+-	inputs: inputs list for this task
 
 ```{r}
-p$task_add(name = "cptxfrv2testrun", 
+p$task_add(name = "getHttpF-WS2", 
            description = "Using get_http_file app to get files from S3 bucket", 
            app=apid,
            inputs = list(url = "http://teamcgc.nci.nih.gov.s3-website-us-east-1.amazonaws.com/20160325SBGworkshop/FastqFiles/G28029_pe_1.fastq", ofname = "G28029_pe_1.fastq"))
@@ -343,12 +372,11 @@ WorkFlow Description:
       - Second Strand (fastQ)
       
 
-### Running the RNA-Seq Alignment STAR which takes a FASTQ file as input
+### Running the RNA-Seq Alignment STAR which takes FASTQ file/s as input
 
 ```{r}
 fastq1 <- p$file(name = "G28029_pe_1.fastq")
 fastq2 <- p$file(name = "G28029_pe_2.fastq")
-
 
 ## Set metadata / Pairend info
 
@@ -361,14 +389,8 @@ fastq2$setMeta(Paired_end = "2")
 (gtf.in1 = new('FilesList',listData=list(gtf.in)))
 (fasta.in <- p$file("HG19_Broad_variant.fasta"))
 
-## Check the input parameters' Class
-## inputs : list(`sbg:y` = 195.083310633897, id = "#sjdbGTFfile", type = list("null", list(items = "File", type = "array")), `sbg:x` = 160.499975860118, label = "sjdbGTFfile")list(`sbg:y` = 323.74995018542, id = "#fastq", `sbg:x` = 164.24999140203, label = "fastq", type = list(list(items = "File", type = "array")), `sbg:includeInPorts` = TRUE)list(`sbg:y` = 469.999910578135, id = "#genomeFastaFiles", type = list("File"), `sbg:x` = 167.749960079791, label = "genomeFastaFiles")
 
-class(fastq.in)
-class(gtf.in)
-class(fasta.in)
-
-tsk = p$task_add(name = "rwfltest", 
+tsk = p$task_add(name = "RNA-WF_WS2", 
            description = "Testing the RNA-seq STAR workflow", 
            app = rwid,
            inputs =  list(fastq = fastq.in, 
@@ -376,12 +398,7 @@ tsk = p$task_add(name = "rwfltest",
                           sjdbGTFfile = list(gtf.in1)))
 
 
-tsk2 = p$task_add(name = "rwfltest_SB:FL", 
-             description = "Testing the RNA-seq STAR workflow", 
-            app = rwid,
-            inputs =  list(fastq = fastq.in, 
-                          genomeFastaFiles = fasta.in,
-                         sjdbGTFfile = sevenbridges:::FilesList(gtf.in)))
+
 
 ## confirm
 p$task(status = "draft")
@@ -397,14 +414,13 @@ tsk1$monitor()
 
 ```{r}
 ## Copy the app
-app.rnawfbam <- a$copyApp(id = "Durga/test1-tumor-normal/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wfl-inbam")
+app.rnawfbam <- a$copyApp(id = "Durga/irp-cgc-with-r/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wfl-inbam")
 rwbid <- app.rnawfbam$id
-## check it is copied
+## check if it is copied
 a$app(project = pid)
 
 ## Run the app
-
-(bam.in <- p$file("G41707Downsample_data_36_downsampled.bam"))
+(bam.in <- p$file("Galaxy14-data13downsampled.bam"))
 (gtf.in <- p$file(".gtf"))
 (fasta.in <- p$file("HG19_Broad_variant.fasta"))
 
@@ -425,16 +441,15 @@ tsk3$update()
 tsk3$monitor()
 ```
 
-## BATCH - Running the RNA-Seq Alignment STAR which takes multiple BAM files as input
+## BATCH - Running the RNA-Seq Alignment STAR which takes multiple BAM file as input
 ```{r}
 ## Copy the app
 ## another app for batch
-app.rnawfbamb <- a$copyApp(id = "Durga/rworkshop2/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wf-inbam-batch-UIcopy")
+app.rnawfbamb <- a$copyApp(id = "Durga/irp-cgc-with-r/rna-seq-alignment-star-baseline-20160217", project = pid, name = "star-wf-inbam-batch-UIcopy")
 
 rwbbid <- app.rnawfbamb$id
-## check it is copied
+## check if it is copied
 a$app(project = pid)
-
 
 ## Run the app
 
@@ -450,8 +465,6 @@ tsk3 = p$task_add(name = "rwf-inbam_batch-R",
                           genomeFastaFiles = fasta.in,
                           sjdbGTFfile = sevenbridges:::FilesList(gtf.in)))
 
-
-
 ## confirm
 p$task(status = "draft")
 
@@ -461,6 +474,16 @@ tsk3$run()
 tsk3$update()
 tsk3$monitor()
 ```
+
+##To download all files from a project.
+```{r}
+a$project("IRP-SBCGC-WS2")$download("~/Downloads")
+
+## To Download specific files use their Ids
+fid <- a$project("IRP-SBCGC-WS2")$file(id ="56f4592ae4b070c30853bbcb")$id
+a$project("IRP-SBCGC-WS2")$file(id = fid)$download("~/Downloads/")
+```
+
 
 
 ## More tutorials
@@ -472,4 +495,5 @@ browseVignettes("sevenbridges")
 ```
 
 or on Bioconductor devel branch sevenbridges [page](http://bioconductor.org/packages/3.3/bioc/html/sevenbridges.html)
+
 
