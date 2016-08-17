@@ -5,40 +5,42 @@ date: "July 18, 2016"
 output: html_document
 ---
 
-<br>
-<br>
+# Introduction
 
-####  This tutorial describes steps involved in running STAR RNA-seq alignment on the FireCloud, include the following sections -  
+This tutorial describes steps involved in running STAR RNA-seq alignment on the FireCloud, include the following sections -  
 
-####1) Creating a docker image of the tool (STAR aligner - https://github.com/alexdobin/STAR)  
-####2) Creating a WiDdLe file to describe the workflow   
-####3) Set up the alignment run on the FireCloud  
-####4) Visualize the alignment using IGV (https://www.broadinstitute.org/igv/)   
-<br>
-<br>
+1. Creating a docker image of the tool (STAR aligner - https://github.com/alexdobin/STAR)  
+2. Creating a WiDdLe file to describe the workflow   
+3. Set up the alignment run on the FireCloud  
+4. Visualize the alignment using IGV (https://www.broadinstitute.org/igv/)   
 
-####Please make sure you complete the following first -  
-####[FireCloud Introduction](https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd)
-####[FireCloud - Using WDL](https://github.com/teamcgc/cgcR/blob/master/vignettes/FireCloud-UsingWDL.Rmd)
-####Install the following 
-#####  - [Docker](https://www.docker.com/)
-#####  - [Integrated Genome Viewer](https://www.broadinstitute.org/igv/) 
-#####  - [samtools](http://samtools.sourceforge.net/)
-#####  - [Cromwell- Broad's workflow execution engine](https://github.com/broadinstitute/cromwell)
-#####  - [Tutorial Files - zipped content below](https://s3.amazonaws.com/teamcgc.nci.nih.gov/TutorialFiles/FireCloudRNAseq.zip)
-######  chr21.fa - reference FASTA - containing only human hg 19 chr21 sequence 
-######  chr21.hg19.gtf - gene annotation file for chr21
-######  sm2G28029pe1.fq - BRAC cancer cell line from CCLE - RNAseq pair-end #1 (random downsampled containg ~610K reads)
-######  sm2G28029pe2.fq - BRAC cancer cell line from CCLE - RNAseq pair-end #2 (random downsampled containg ~610K reads)
-######  tsvfiles.xlsx - template for creating tsv files for the FireCloud
-<br>
-<br>
+*Please make sure you complete the following first.*
 
-### 1) Creating a Docker image of STAR (Optional)
-There are several different ways of creating a docker image. <https://docs.docker.com/engine/tutorials/dockerimages/>   
+- [FireCloud Introduction](https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd)
+- [FireCloud - Using WDL](https://github.com/teamcgc/cgcR/blob/master/vignettes/FireCloud-UsingWDL.Rmd)
+
+*Install the following:* 
+
+- [Docker](https://www.docker.com/)
+- [Integrated Genome Viewer](https://www.broadinstitute.org/igv/) 
+- [samtools](http://samtools.sourceforge.net/)
+- [Cromwell- Broad's workflow execution engine](https://github.com/broadinstitute/cromwell)
+- [Tutorial Files - zipped content below](https://s3.amazonaws.com/teamcgc.nci.nih.gov/TutorialFiles/FireCloudRNAseq.zip)
+   - chr21.fa - reference FASTA - containing only human hg 19 chr21 sequence 
+   - chr21.hg19.gtf - gene annotation file for chr21
+   - sm2G28029pe1.fq - BRAC cancer cell line from CCLE - RNAseq pair-end #1 (random downsampled containg ~610K reads)
+   - sm2G28029pe2.fq - BRAC cancer cell line from CCLE - RNAseq pair-end #2 (random downsampled containg ~610K reads)
+   - tsvfiles.xlsx - template for creating tsv files for the FireCloud
+
+
+# Tutorial
+
+## Creating a Docker image of STAR (Optional)
+
+There are several different ways of [creating a docker image](https://docs.docker.com/engine/tutorials/dockerimages/).   
 I used a Dockerfile, which is essentially a list of instructions to tell Docker how to build the image.
 
-The STAR image is built and stored in the dockerhub - <https://hub.docker.com/r/stevetsa/staralign/>   
+The STAR image is built and stored in the dockerhub - https://hub.docker.com/r/stevetsa/staralign/   
 Skip to the next section if you are just using the image, not creating a new one.  
 
 ```{}
@@ -71,7 +73,6 @@ RUN git submodule update --init --recursive
 # make manual
 ENV PATH /STAR/source:$PATH
 ````
-
 Build the image using the Dockerfile.
 
 ```{sh, eval=FALSE}
@@ -83,8 +84,8 @@ docker commit -m "first commit" -a "Steve Tsa" 4629cdb394d3 stevetsa/staralign:v
 docker push stevetsa/staralign
 ```
 
+## Creating a WiDdLe file to describe the workflow   
 
-###2) Creating a WiDdLe file to describe the workflow   
 STAR is a fast aligner but uses a lot of memory.  This tutorial is designed to run downsampled RNAseq data aligning only to chromosome 21.  If you plan to run full RNA-seq data against full human genome, resource allocation in the runtime block needs to be changed accordingly.
 
 ```{}
@@ -138,13 +139,14 @@ workflow star {
  
 ````
 
-Test the WDL file locally -  
-Creating JSON file
+### WDL creation and testing
+
+Create the JSON file.
 ```{sh, eval=FALSE}
 java -jar /Users/<path file>/wdltool-0.5.jar inputs StarAlign_cfg2.wdl > StarAlign_cfg2.json
 ```
 
-Modifying the json file to include the location/names of the input files.  
+Modify the json file to include the location/names of the input files.  
 ```{}
 {
   "star.RefHg19": "chr21.fa",
@@ -159,10 +161,10 @@ Testing the WDL file locally
 java -jar /Users/<path to file>/cromwell-0.20.jar run StarAlign_cfg2.wdl StarAlign_cfg2.json
 ```
 
-If the run is successfully completed, you are ready to run this WDL file on the FireCloud.
+If the run is successfully completed locally, you are ready to run this WDL file on the FireCloud.
 
 Use the following command to push the WDL file to the FireCloud method repo.  
-More info here <https://github.com/broadinstitute/firecloud-cli>.
+More info [here](https://github.com/broadinstitute/firecloud-cli).
 
 ```{sh, eval=FALSE}
 docker run --rm -it -v "$HOME"/.config:/.config broadinstitute/firecloud-cli gcloud auth login
@@ -172,7 +174,9 @@ docker run --rm -it -v "$HOME"/.config:/.config -v "$PWD":/working broadinstitut
 ```
 
 
-###3) Set up STAR alignment run on the FireCloud - for detailed description of each step, please refer to [FireCloud intro](https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd)  
+## Set up STAR alignment run on the FireCloud
+
+For detailed description of each step, please refer to [FireCloud intro](https://github.com/teamcgc/cgcR/blob/master/vignettes/Firecloud.intro.Rmd)  
 
 ```{}
 Log in to FireCloud in a private browser such as Chrom Incognito Window <https://portal.firecloud.org>  
@@ -212,13 +216,16 @@ Click "Launch Analysis"
 ````
 
 You will be able to monitor the progree under the "Monitor" tab.  
+
 After the run is successfully completed, you will be able to see two additional columns in "Data" -> "Sample."  
 The "bam" column contains the BAM file and the "response_star"" column contains STDOUT output.
 
-###4) Visualize the alignment using IGV (optional)
+## Visualize the alignment using IGV (optional)
+
 To visualize alignment, you need samtools (http://samtools.sourceforge.net/) and IGV  (https://www.broadinstitute.org/igv/).
 
 Download the bam file to a local machine
+
 ```{sh, eval=FALSE}
 samtools index smG28029wdl2Aligned.sortedByCoord.out.bam
 ```
