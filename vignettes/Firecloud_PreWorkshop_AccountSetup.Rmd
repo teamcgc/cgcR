@@ -8,7 +8,7 @@ output: html_document
 <br>
 FireCloud, developed and maintained by the Broad Institute, is one of the three National Cancer Institute's Cancer Genomics Cloud Pilots.  <https://software.broadinstitute.org/firecloud/>.  This documment provides step-by-step instruction for setting up an user account and a billing account.
 
-#### User ccount registration
+#### User Acount registration
 <https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-registration>
 
 ```{}
@@ -17,8 +17,6 @@ FireCloud, developed and maintained by the Broad Institute, is one of the three 
 - Sign In with a Gmail or Google Apps Account (e.g., FireCloudUser@gmail.com). When asked to allow FireCloud to view your email address and basic profile info, etc., please click Allow. An explanation of these requests is posted in the Help Forum. You will be prompted to enter New User Registration information.
 - Please enter a Contact Email if it differs from your Gmail or Google Apps Account.
 - Click Register
-(After registering, you will see a message indicating your FireCloud account is inactive. A FireCloud administrator will activate your account within 24 hours.)
-
 ```
 
 #### Billing Account
