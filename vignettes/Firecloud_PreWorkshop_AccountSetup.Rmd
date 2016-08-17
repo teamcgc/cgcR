@@ -1,0 +1,92 @@
+---
+title: "Firecloud-Pre-workshop Account Setup"
+author: "Steve Tsang"
+date: "August 17, 2016"
+output: html_document
+---
+<br>
+<br>
+FireCloud, developed and maintained by the Broad Institute, is one of the three National Cancer Institute's Cancer Genomics Cloud Pilots.  <https://software.broadinstitute.org/firecloud/>.  This documment provides step-by-step instruction for setting up an user account and a billing account.
+
+#### User ccount registration
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-registration>
+
+```{}
+- Go to <Portal.FireCloud.org>
+- Click "Register"
+- Sign In with a Gmail or Google Apps Account (e.g., FireCloudUser@gmail.com). When asked to allow FireCloud to view your email address and basic profile info, etc., please click Allow. An explanation of these requests is posted in the Help Forum. You will be prompted to enter New User Registration information.
+- Please enter a Contact Email if it differs from your Gmail or Google Apps Account.
+- Click Register
+(After registering, you will see a message indicating your FireCloud account is inactive. A FireCloud administrator will activate your account within 24 hours.)
+
+```
+
+#### Billing Account
+<https://software.broadinstitute.org/firecloud/guide/topic?name=firecloud-google>
+
+Getting Started with a FireCloud Billing Project: General Public
+There are two ways you can gain access to a FireCloud Billing Project.
+
+1. The owner of an existing FireCloud Billing Project can submit a FireCloud Billing Project Request Form to authorize you for his or her FireCloud Billing Project.
+
+2. Request a new FireCloud Billing Project by submitting a FireCloud Billing Project Request Form. First, you must set up a Google Billing Account. Please refer to the steps described in Setting up a New FireCloud Billing Project: General Public.
+
+Setting up a New FireCloud Billing Project: General Public
+In order for a FireCloud Administrator to create a new FireCloud Billing Project, you must first:
+
+1. Set up a Google Billing Account, using one of the options below:
+
+Create your own Google Billing Account using a credit card or bank account.
+
+Talk to your institutional procurement office and see if they have a preferred account set up method with Google (such as a third party reseller or an existing account).
+
+Set up a Google Billing Account through a third party reseller. There are many options and two examples are: Onix Networking or Sada Systems. Third party resellers provide additional billing options at no extra cost.
+
+2. Add google@broadinstitute.com as a Billing Administrator to your Google Billing Account.
+
+3. Request a new FireCloud Billing Project by submitting a FireCloud Billing Project Request Form. This request should include your Google Billing Account ID. You can can remove google@broadinstitute.com as a Billing Administrator after you receive confirmation that your FireCloud Billing Project has been created.
+
+These steps are described below in greater detail.
+
+```{}
+
+1. Go to the Google Developers Console Billing page (https://console.cloud.google.com/billing) and click on "New billing account"
+
+2. You will need to provide account name, e.g., "MyLab Billing Account.", billing information, but can start with a free trial that includes $300 in compute and storage credits.
+
+3. From the Google Developers Console Billing page above, note your billing account ID (000X00-00X0XX-0X0X0) and click on the newly created account e.g."MyLab Billing Account."
+
+4. On your Billing Account page, please add google@broadinstitute.com to the box below Billing Administrators. 
+
+5. Once you receive an email confirming the creation of your FireCloud Billing Project, you can remove the FireCloud billing administrator from your account. To do so, click on the "X" next to google@broadinstitute.com on your billing account page. 
+
+6. You should provide this Google Billing Account ID (from step 3) when you request a new FireCloud Billing Project through the FireCloud Billing Project Request Form. (URL below)
+
+```
+FireCloud Billing Project Request <https://goo.gl/m7j3go>
+
+Using FireCloud without a FireCloud Billing Project
+You do not need access to a FireCloud Billing Project to use FireCloud. Tutorial workspaces with open access data will be available to view after your register.
+
+In addition, if a FireCloud user, such as a collaborator or PI, shares a workspace with you and grants you WRITER access, you can compute within that workspace. All charges incurred for that workspace will be tracked through the workspace owner’s FireCloud Billing Project.
+
+#### Login
+<https://portal.firecloud.org/>  
+This tutorial is written using the Google Chrome browser.
+
+```{}
+Click "Sign In"
+Sign in with your google credential
+(If you have multiple google accounts, log in in an incognito window by clicking File -> New Incognito Window)
+```
+
+#### TCGA access
+
+After you log in, your profile is displayed.  
+If you have an NIH account, link your NIH account.
+
+```{}
+Click "Log-In to NIH to re-link your account"
+Log in with your NIH credential
+(You will need to renew/re-link your account periodically)
+```
