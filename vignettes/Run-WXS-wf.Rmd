@@ -17,17 +17,10 @@ This guide will help you use Seven Bridges API with the R client package sevenbr
 
 The following primary steps will be included:
 
-* uploading files and setting the metadata;
-* 
+* Installing the CGC-SBG package
+* Selecting a workflow from a particular project to run
+* Running the WXS workflow
 
-# First Steps
-
-First download the [R markdown file]
-(https://raw.githubusercontent.com/tengfei/sevenbridges/master/vignettes/bioc-workflow.Rmd) of this page, so you can load it to your Rstudio or your favorite R IDE to run through all examples and tweak setup.
-
-```{r}
-download.file("", destfile = "")
-```
 
 ## Installing the Package
 
@@ -53,8 +46,6 @@ browseVignettes(package = 'sevenbridges')
 
 ### Register on NCI Cancer Genomics Cloud
 
-![cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
-
 You can find login/registration on NCI [Cancer Genomics Cloud homepage](http://www.cancergenomicscloud.org/), follow the [signup tutorial](http://docs.cancergenomicscloud.org/docs/sign-up-for-the-cgc) if you have an ERA Commons or NIH account.
 
 ### Get your authentifiation
@@ -67,9 +58,7 @@ The final goal is make a workflow that accepts one file per sample (or two files
 
 The final workflow looks like this, it's composed of two tools: Picard SAM to Fastq command line tool and STAR alignment tool.
 
-![quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
-
-### Create a project on your account via API R client
+### Select a project on your account via API R client
 
 First step to do is to create an _Auth_ object, almost everything starts from this object. SB-CGC API client follows a pattern like "Auth$properties$action".
 
