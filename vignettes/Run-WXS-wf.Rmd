@@ -1,0 +1,169 @@
+---
+title: "Run-WXS-wf"
+author: "Durga Addepalli"
+date: "January 4, 2017"
+output: html_document
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+library(sevenbridges)
+```
+
+# INTRODUCTION
+
+This guide will help you use Seven Bridges API with the R client package sevenbridges, and guide you through the steps needed to run whole exome sequencing pipeline on the Seven Bridges CGC platform.
+
+The following primary steps will be included:
+
+* uploading files and setting the metadata;
+* 
+
+# First Steps
+
+First download the [R markdown file]
+(https://raw.githubusercontent.com/tengfei/sevenbridges/master/vignettes/bioc-workflow.Rmd) of this page, so you can load it to your Rstudio or your favorite R IDE to run through all examples and tweak setup.
+
+```{r}
+download.file("", destfile = "")
+```
+
+## Installing the Package
+
+To download and install the latest version of ‘sevenbridges’ package from GitHub:
+
+```{r}
+if(!require("devtools", quietly = TRUE)){
+    install.packages("devtools") 
+}
+source("http://bioconductor.org/biocLite.R")
+library(devtools)
+install_github("sbg/sevenbridges-r", build_vignettes=TRUE, 
+  repos=BiocInstaller::biocinstallRepos(),
+  dependencies=TRUE)
+library("sevenbridges")
+```
+
+After the installation you can always browser vignette
+
+```{r}
+browseVignettes(package = 'sevenbridges')
+```
+
+### Register on NCI Cancer Genomics Cloud
+
+![cgc-home](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/CGC-Home.png)
+
+You can find login/registration on NCI [Cancer Genomics Cloud homepage](http://www.cancergenomicscloud.org/), follow the [signup tutorial](http://docs.cancergenomicscloud.org/docs/sign-up-for-the-cgc) if you have an ERA Commons or NIH account.
+
+### Get your authentifiation
+
+After you login, you can get your authentication under your account setting and 'developer' tab [tutorial](http://docs.cancergenomicscloud.org/docs/get-your-authentication-token)
+
+## Quickstart
+
+The final goal is make a workflow that accepts one file per sample (or two files for paired-end data), GTF file,genome Fasta files and generate aligned reads, de novo canonical junctions, non-canonical splices, and chimeric (fusion) transcripts. 
+
+The final workflow looks like this, it's composed of two tools: Picard SAM to Fastq command line tool and STAR alignment tool.
+
+![quickstart-flow](https://teamcgc.nci.nih.gov.s3.amazonaws.com/Images/RNA-Seq_AlignmentSTAR.png)
+
+### Create a project on your account via API R client
+
+First step to do is to create an _Auth_ object, almost everything starts from this object. SB-CGC API client follows a pattern like "Auth$properties$action".
+
+On the SB platform/CGC GUI, Auth is your account, and it contains projects, billing groups, users, project contains tasks, apps, files etc, so it's easy to imagine your API call.
+
+To create Auth, just pass token and url, by default url is set to CGC.  
+To create an Auth object, run the command below and replace "fake_token" with your own token.
+
+```{r}
+a <- Auth(token = "your_token", url = "https://cgc-api.sbgenomics.com/v2/")
+
+```
+
+To create/add a project, you need to know your billing group id, cost related to this project will be charged from this billing group.
+
+```{r}
+(b <- a$billing())
+bid <- a$billing()$id
+
+p = a$project(id = "Durga/exome-sequencing")
+pid <- p$id
+
+```
+
+## RUNNING THE WORKFLOW WITH PAIRED FASTQ FILES
+```{r}
+## Input Files information
+
+fastqs <- c("c48069f6a945ec640de9a71e3ed3078e.converted.pe_1.fastq", "c48069f6a945ec640de9a71e3ed3078e.converted.pe_2.fastq")
+
+ref <- p$file(name = "human_g1k_v37_decoy.fasta")
+intervals <- p$file(name = "wholegenome_hg38_with_chr.interval_list")
+
+
+(fastq_in <- p$file(name= fastqs, exact = TRUE))
+(interval.in  <- p$file(".interval_list", complete = TRUE))
+(fasta.in <- p$file("HG19_Broad_variant.fasta"))
+
+
+## Selecting the workflow
+
+exsapp <- a$app(id = "Durga/exome-sequencing/exomeseqanalysis02-removesortaddparameters/6")
+apid <- exsapp$id
+
+## Create a task
+
+tsk = p$task_add(name = "wxs-R-test1", 
+           description = "Testing the wxs workflow in R", 
+           app = apid,
+           inputs =  list(fastq_list = fastq_in, 
+                          reference = fasta.in,
+                          target_intervals = interval.in))
+
+
+## Run the task
+tsk$run()
+```
+
+## RUNNING THE WORKFLOW FOR TUMOR-NORMAL PAIRS
+
+```{r}
+## Input Files information
+## Assuming the reference and the intervals files are the same form the previous task.
+
+fastqN <- c("TCRBOA2-N-WEX.read1.fastq.bz2", "TCRBOA2-N-WEX.read2.fastq.bz2")
+fastqT <- c("TCRBOA2-T-WEX.read1.fastq.bz2", "TCRBOA2-T-WEX.read2.fastq.bz2")
+
+read_group_header <- ("@RG\tID:1\tSM:TCRBOA2-N-WEX\tPL:IlluminaHiSeq")
+read_group_header_1 <- ("@RG\tID:1\tSM:TCRBOA2-T-WEX\tPL:IlluminaHiSeq")
+
+(fastqN_in <- p$file(name= fastqN, exact = TRUE))
+(fastqT_in <- p$file(name= fastqT, exact = TRUE))
+
+## Selecting the workflow
+
+exsTNapp <- a$app(id = "Durga/exome-sequencing/wholeexomeseq-tn/6")
+apid2 <- exsTNapp$id
+
+## Create a task
+
+tsk1 = p$task_add(name = "wxsTN-R-test1", 
+           description = "Testing the wxs-TN workflow in R", 
+           app = apid,
+           inputs =  list(Normal_fastq_list = fastqN_in,
+                          Tumor_fastq_list = fastqT_in, 
+                          reference = fasta.in,
+                          target_intervals = interval.in,
+                          read_group_header = read_group_header,
+                          read_group_header_1 = read_group_header_1))
+
+
+
+## Run the task
+tsk1$run()
+```
+
+
