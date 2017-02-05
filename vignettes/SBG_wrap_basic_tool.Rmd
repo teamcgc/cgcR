@@ -54,7 +54,7 @@ library(sevenbridges)
 
 # Preparing the inputs and outputs
 
-The [common workflow language](http://www.commonwl.org/draft-3/UserGuide.html) describes in some detail the 
+The [Common Workflow Language draft-3 user guide](http://www.commonwl.org/draft-3/UserGuide.html) describes in some detail the 
 details of the YAML file that describes a tool. The approach that is used in the `sevenbridges` package
 is to allow the developer to describe the tool using `R` code. In the next code block, I am 
 describing the inputs and outputs of our very simple tool, a command-line R script.
